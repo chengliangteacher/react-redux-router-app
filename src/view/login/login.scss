@@ -1,0 +1,10 @@
+.login {
+  background-image: url('./login-bg.png');
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  .login-form {
+    background-color: white;
+    width: 400px;
+    border-radius: 10px;
+  }
+}
