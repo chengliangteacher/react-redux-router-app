@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { setCollapsed } from '../../../store/action/layout';
+import { setCollapsed } from '../../../redux/action/layout';
 
 class Header extends React.Component {
   render() {

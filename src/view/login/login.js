@@ -20,7 +20,6 @@ export default class Login extends React.Component {
       code: '',
     };
     this.state = {
-      //=====================================http://sz.xrdev.cn/inspection/gifCode?d=${new Date().getTime()}====================================//
       imageCode: new Date().getTime(),
       loading: false,
     };

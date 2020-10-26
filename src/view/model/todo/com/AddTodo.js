@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, Button } from 'antd';
 import { connect } from 'react-redux';
-import { addTodo } from '../../../../store/action/todo';
+import { addTodo } from '../../../../redux/action/todo';
 
 class AddTodo extends React.Component {
   constructor(props) {

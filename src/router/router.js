@@ -1,6 +1,5 @@
 import { lazy } from 'react';
-import a from './model/a';
-import todo from './model/todo';
+import model from './model';
 const routes = [
   {
     title: '登录',
@@ -17,7 +16,7 @@ const routes = [
   {
     path: '/v',
     component: lazy(() => import('../view/layout/index')),
-    children: [...a, ...todo],
+    children: model,
   },
   {
     title: '404',

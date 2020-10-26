@@ -5,30 +5,89 @@
     background-color: white;
     display: flex;
     align-items: center;
+
     .header-left {
       display: flex;
+
       h3 {
         margin-right: 1rem;
       }
+
       > div {
         font-size: 18px;
         cursor: pointer;
+
         &:hover {
           font-weight: bolder;
         }
       }
     }
   }
+
   .banner {
     height: calc(100vh - 60px);
     overflow-y: auto;
     overflow-x: hidden;
     float: left;
   }
+
   .content {
-    height: calc(100vh - 60px);
+    height: calc(100vh - 90px);
     overflow: auto;
     padding: 10px;
     box-sizing: border-box;
+  }
+
+  .tag-view {
+    height: 30px;
+    line-height: 30px;
+    background-color: white;
+    box-shadow: 2px 0px 10px #eee;
+    display: flex;
+    align-items: center;
+
+    .tag-item {
+      flex-grow: 1;
+      margin: 0 5px;
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .contextMenu-wrap {
+      z-index: 100;
+      position: fixed;
+      background: linear-gradient(to right, #c6c7cf, #f0f0f0);
+      box-shadow: 0px 2px 5px #999999;
+      border-radius: 4px;
+      padding-top: 5px;
+
+      .contextMenu-option {
+        padding: 0px 50px 2px 15px;
+        min-width: 160px;
+        cursor: default;
+        font-size: 14px;
+
+        &:hover {
+          background: #388bfe;
+          color: white;
+        }
+
+        &:active {
+          color: #b5b7be;
+          background: linear-gradient(to top, #555, #444);
+        }
+      }
+
+      .contextMenu-separator {
+        width: 100%;
+        height: 1px;
+        background: #b5b7be;
+        margin: 2px 0;
+      }
+    }
   }
 }

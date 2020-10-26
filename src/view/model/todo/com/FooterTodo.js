@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
-import { setVisibilityFilter } from '../../../../store/action/todo';
+import { setVisibilityFilter } from '../../../../redux/action/todo';
 function FooterTodo({ visibilityFilter, handleIsibilityFilter }) {
   return (
     <div>

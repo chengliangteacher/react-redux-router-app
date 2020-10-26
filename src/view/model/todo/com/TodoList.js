@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { toggleTodo } from '../../../../store/action/todo';
+import { toggleTodo } from '../../../../redux/action/todo';
 
 function TodoList({ todoList, handleToggleTodo }) {
   return (
