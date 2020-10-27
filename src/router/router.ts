@@ -4,7 +4,7 @@ const routes = [
   {
     title: '登录',
     path: '/login',
-    component: lazy(() => import('../view/login/login.js')),
+    component: lazy(() => import('../view/login/login')),
   },
   //=====================================默认初始页面====================================//
   {

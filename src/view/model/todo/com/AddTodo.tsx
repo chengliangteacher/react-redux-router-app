@@ -2,10 +2,15 @@ import React from 'react';
 import { Input, Button } from 'antd';
 import { connect } from 'react-redux';
 import { addTodo } from '../../../../redux/action/todo';
-
-class AddTodo extends React.Component {
-  constructor(props) {
-    super();
+interface props {
+  handleAddTodoList: (value: string) => void;
+}
+interface stateTypes {
+  value: string;
+}
+class AddTodo extends React.Component<props, stateTypes> {
+  constructor(props: props) {
+    super(props);
     this.state = {
       value: '',
     };
@@ -33,9 +38,9 @@ class AddTodo extends React.Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    handleAddTodoList: (text) => {
+    handleAddTodoList: (text: string) => {
       dispatch(addTodo(text));
     },
   };

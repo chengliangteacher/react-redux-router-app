@@ -5,7 +5,7 @@ import { setCollapsed } from '../../../redux/action/layout';
 
 class Header extends React.Component {
   render() {
-    const { dispatch, collapsed } = this.props;
+    const { dispatch, collapsed }: any = this.props;
     return (
       <div className="header">
         <div className="header-left">
@@ -31,7 +31,7 @@ class Header extends React.Component {
   }
 }
 
-export default connect(({ layout }) => {
+export default connect(({ layout }: any) => {
   return {
     collapsed: layout.collapsed,
   };

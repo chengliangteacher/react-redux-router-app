@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-function Status({ code, children }) {
+function Status({ code, children }: any) {
   return (
     <Route
-      render={({ staticContext }) => {
+      render={({ staticContext }: any) => {
         if (staticContext) staticContext.status = code;
         return children;
       }}

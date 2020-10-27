@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'antd';
 import { connect } from 'react-redux';
 import { setVisibilityFilter } from '../../../../redux/action/todo';
-function FooterTodo({ visibilityFilter, handleIsibilityFilter }) {
+function FooterTodo({ visibilityFilter, handleIsibilityFilter }: any) {
   return (
     <div>
       <Button
@@ -36,15 +36,15 @@ function FooterTodo({ visibilityFilter, handleIsibilityFilter }) {
   );
 }
 
-const mapStateToProps = ({ todos }) => {
+const mapStateToProps = ({ todos }: any) => {
   return {
     visibilityFilter: todos.visibilityFilter,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    handleIsibilityFilter: (filter) => {
+    handleIsibilityFilter: (filter: any) => {
       dispatch(setVisibilityFilter(filter));
     },
   };

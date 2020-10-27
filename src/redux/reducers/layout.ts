@@ -10,7 +10,7 @@ const initState = {
   ],
 };
 
-export default function layout(state = initState, action) {
+export default function layout(state = initState, action: any) {
   switch (action.type) {
     case 'SETCOLLAPSED': {
       return Object.assign({}, state, { collapsed: !state.collapsed });

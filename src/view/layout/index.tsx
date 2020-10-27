@@ -4,7 +4,12 @@ import Banner from './child/banner';
 import Content from './child/content';
 import TagView from './child/tag-view';
 import './layout.scss';
-export default class LayoutView extends React.Component {
+interface props {
+  location: any;
+  history: any;
+  routes: any;
+}
+export default class LayoutView extends React.Component<props> {
   render() {
     return (
       <div className="layout">

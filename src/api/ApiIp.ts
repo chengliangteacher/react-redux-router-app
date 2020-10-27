@@ -5,7 +5,7 @@
     @params       
     @return       
 */
-export const developUrl = 'http://sz.xrdev.cn/inspection';
+export const developUrl = 'http://sz.xrdata.net/inspection';
 //获取当前的URL中的地址，同时携带端口号,不携带http://
 let projectAddrass = window.location.host;
 // let projectAddrassNoPort = window.location.hostname;

@@ -19,7 +19,7 @@ export const setCollapsed = () => {
     @return       
 */
 let routerTagId = 2;
-export const addRouterTag = (routerItem) => {
+export const addRouterTag = (routerItem: any) => {
   return {
     type: 'ADD_ROUTER_TAG',
     routerItem: { ...routerItem, id: routerTagId++, isDel: true },
@@ -32,9 +32,9 @@ export const addRouterTag = (routerItem) => {
     @params       routerItem -> 当前路由 tagsData -> 路由数据
     @return       
 */
-export const judgeRouterRepeat = (routerItem, tagsData) => {
-  return (dispatch) => {
-    if (tagsData.some((item) => item.pathname === routerItem.pathname)) {
+export const judgeRouterRepeat = (routerItem: any, tagsData: any) => {
+  return (dispatch: any) => {
+    if (tagsData.some((item: any) => item.pathname === routerItem.pathname)) {
       return;
     } else {
       dispatch(addRouterTag(routerItem));
@@ -48,7 +48,7 @@ export const judgeRouterRepeat = (routerItem, tagsData) => {
     @params       id => 路由唯一标识符
     @return       
 */
-export const deleteRouterTag = (id) => {
+export const deleteRouterTag = (id: number) => {
   return {
     type: 'DELETE_ROUTER_TAG',
     id,
@@ -61,11 +61,15 @@ export const deleteRouterTag = (id) => {
     @params       router=>当前router history=>路由 tagsData=>所有路由
     @return       
 */
-export const afterDeleteRouterTag = (router, history, tagsData) => {
-  return (dispatch) => {
+export const afterDeleteRouterTag = (
+  router: any,
+  history: any,
+  tagsData: any
+) => {
+  return (dispatch: any) => {
     if (router.pathname === history.location.pathname) {
       const index = tagsData.findIndex(
-        (item) => item.pathname === router.pathname
+        (item: any) => item.pathname === router.pathname
       );
       if (index - 1 >= 0) {
         history.push(tagsData[index - 1]);
@@ -76,15 +80,19 @@ export const afterDeleteRouterTag = (router, history, tagsData) => {
 };
 
 //=====================================关闭其它tag====================================//
-export const deleteOtherTag = (id) => {
+export const deleteOtherTag = (id: number) => {
   return {
     type: 'DELETE_OTHER_TAG',
     id,
   };
 };
 
-export const afterDeleteOtherTag = (router, history, tagsData) => {
-  return (dispatch) => {
+export const afterDeleteOtherTag = (
+  router: any,
+  history: any,
+  tagsData: any
+) => {
+  return (dispatch: any) => {
     if (router.pathname !== history.location.pathname) {
       history.push(router);
     }

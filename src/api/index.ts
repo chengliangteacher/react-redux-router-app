@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import * as ApiIp from './ApiIp';
 import { notification } from 'antd';
 //=====================================全局配置====================================//
@@ -9,13 +9,13 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 
 //=====================================请求拦截器====================================//
 axios.interceptors.request.use(
-  function (config) {
+  function (config: AxiosRequestConfig) {
     if (sessionStorage.token) {
       config.headers.Authorization = sessionStorage.token;
     }
     return config;
   },
-  function (error) {
+  function (error: AxiosError) {
     // 对请求错误做些什么
     return Promise.reject(error);
   }
@@ -23,7 +23,7 @@ axios.interceptors.request.use(
 
 //=====================================响应拦截器====================================//
 axios.interceptors.response.use(
-  function (response) {
+  function (response: AxiosResponse) {
     if (response.data.code === 200) {
       if (response.config.method !== 'get') {
         notification.success({
@@ -46,7 +46,7 @@ axios.interceptors.response.use(
     }
     return Promise.reject(response.data);
   },
-  function (error) {
+  function (error: AxiosError) {
     // 对响应错误做点什么
     notification.error({
       message: '服务器错误',

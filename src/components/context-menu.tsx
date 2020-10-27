@@ -1,32 +1,48 @@
 import React, { Component } from 'react';
 
-class RightClickContextMenu extends Component {
-  constructor(props) {
+interface routerConfig {
+  pathname: string;
+  id: number;
+}
+interface props {
+  handleCloseTag: (router: routerConfig) => void;
+  handleCloseOtherTag: (router: routerConfig) => void;
+  handleCloseAllTag: () => void;
+}
+interface statetype {
+  visible: boolean;
+  currentRouter: routerConfig;
+}
+class RightClickContextMenu extends Component<props, statetype> {
+  public root: any;
+  constructor(props: props) {
     super(props);
     this.state = {
       visible: false, // 控制右键菜单显示
-      currentRouter: {}, // 当前点击tag路由信息
+      currentRouter: {
+        pathname: '',
+        id: 0,
+      }, // 当前点击tag路由信息
     };
+    this.root = React.createRef();
   }
 
   componentDidMount() {
     //=====================================添加右键点击、点击事件监听====================================//
-    document
-      .getElementById('tag-view')
-      .addEventListener('contextmenu', this.handleContextMenu);
+    const element: any = document.getElementById('tag-view');
+    element.addEventListener('contextmenu', this.handleContextMenu);
     document.addEventListener('click', this.handleClick);
   }
 
   componentWillUnmount() {
     //=====================================移除事件监听====================================//
-    document
-      .getElementById('tag-view')
-      .removeEventListener('contextmenu', this.handleContextMenu);
+    const element: any = document.getElementById('tag-view');
+    element.removeEventListener('contextmenu', this.handleContextMenu);
     document.removeEventListener('click', this.handleClick);
   }
 
   //=====================================右键菜单事件====================================//
-  handleContextMenu = (event) => {
+  handleContextMenu = (event: any) => {
     if (event.target.tagName !== 'A') return;
     event.preventDefault();
     if (event.target.getAttribute('data-item')) {
@@ -82,12 +98,7 @@ class RightClickContextMenu extends Component {
 
     return (
       visible && (
-        <div
-          ref={(ref) => {
-            this.root = ref;
-          }}
-          className="contextMenu-wrap"
-        >
+        <div ref={this.root} className="contextMenu-wrap">
           <div
             className="contextMenu-option"
             onClick={() => this.props.handleCloseTag(this.state.currentRouter)}

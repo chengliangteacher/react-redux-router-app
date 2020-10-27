@@ -11,7 +11,15 @@ import {
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import model from '../../../router/model';
 import ContextMenu from '../../../components/context-menu';
-class TagView extends React.Component {
+interface props {
+  location: Location;
+  history: any;
+  dispatch: any;
+  tagDatas: any;
+}
+class TagView extends React.Component<props> {
+  public tagview: any;
+  public interval: any;
   componentDidMount() {
     this.handleAddRouter(this.props.location);
     this.handleListenRouter();
@@ -20,12 +28,12 @@ class TagView extends React.Component {
   }
   //=====================================监听路由变化====================================//
   handleListenRouter = () => {
-    this.props.history.listen((data) => {
+    this.props.history.listen((data: any) => {
       this.handleAddRouter(data);
     });
   };
   //=====================================新增路由到redux====================================//
-  handleAddRouter = (data) => {
+  handleAddRouter = (data: any) => {
     let routerData = data;
     //=====================================获取当前页面name====================================//
     model.forEach((item) => {
@@ -36,15 +44,15 @@ class TagView extends React.Component {
     this.props.dispatch(judgeRouterRepeat(routerData, this.props.tagDatas));
   };
   //=====================================关闭标签====================================//
-  handleCloseTag = (val) => {
+  handleCloseTag = (val: any) => {
     this.props.dispatch(
       afterDeleteRouterTag(val, this.props.history, this.props.tagDatas)
     );
   };
   //=====================================关闭其它标签====================================//
-  handleCloseOtherTag = (val) => {
+  handleCloseOtherTag = (val: any) => {
     this.props.dispatch(
-      afterDeleteOtherTag(val, this.props.history, this.props.tagsData)
+      afterDeleteOtherTag(val, this.props.history, this.props.tagDatas)
     );
   };
   //=====================================关闭所有标签====================================//
@@ -88,7 +96,7 @@ class TagView extends React.Component {
       <div id="tag-view" className="tag-view">
         <StepBackwardOutlined onClick={this.handleTurnScrollLeft} />
         <div ref={this.tagview} className="tag-item">
-          {tagDatas.map((item, index) => {
+          {tagDatas.map((item: any, index: number) => {
             return (
               <Tag
                 key={index}
@@ -122,7 +130,7 @@ class TagView extends React.Component {
   }
 }
 
-const mapStateToProps = ({ layout }) => {
+const mapStateToProps = ({ layout }: any) => {
   return {
     tagDatas: layout.tagDatas,
   };

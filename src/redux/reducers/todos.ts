@@ -9,7 +9,7 @@ const initState = {
   todoList: [],
   visibilityFilter: 'all',
 };
-const todos = (state = initState, action) => {
+const todos = (state = initState, action: any) => {
   switch (action.type) {
     //=====================================新增todo====================================//
     case 'ADD_TODO':
@@ -26,7 +26,7 @@ const todos = (state = initState, action) => {
     //=====================================点击单个todo项====================================//
     case 'TOGGLE_TODO':
       return Object.assign({}, state, {
-        todoList: state.todoList.map((todo) =>
+        todoList: state.todoList.map((todo: any) =>
           todo.id === action.id ? { ...todo, completed: !todo.completed } : todo
         ),
       });

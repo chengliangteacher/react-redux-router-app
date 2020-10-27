@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import md5 from 'md5';
 import './login.scss';
+import axios from '../../api';
 const layout = {
   labelCol: {
     span: 4,
@@ -10,13 +11,21 @@ const layout = {
     span: 20,
   },
 };
-export default class Login extends React.Component {
-  constructor(props) {
+interface props {
+  history: any;
+}
+interface stateTypes {
+  imageCode: string | number;
+  loading: boolean;
+}
+export default class Login extends React.Component<props, stateTypes> {
+  public formInfo: any;
+  constructor(props: props) {
     super(props);
     //=====================================form数据====================================//
     this.formInfo = {
       username: 'cl',
-      password: '111111',
+      password: '',
       code: '',
     };
     this.state = {
@@ -25,7 +34,7 @@ export default class Login extends React.Component {
     };
   }
   //=====================================文本框取值====================================//
-  handleChange = (e, key) => {
+  handleChange = (e: any, key: any) => {
     this.formInfo[key] = e.target.value;
   };
   //=====================================登录====================================//
@@ -34,7 +43,7 @@ export default class Login extends React.Component {
       loading: true,
     });
     this.formInfo.password = md5(this.formInfo.password);
-    this.$axios({
+    axios({
       method: 'post',
       url: `/login?username=${
         this.formInfo.username
@@ -87,7 +96,6 @@ export default class Login extends React.Component {
           <Form.Item
             label="密码"
             name="password"
-            type="password"
             rules={[{ required: true, message: '请输入密码' }]}
           >
             <Input.Password
@@ -122,7 +130,7 @@ export default class Login extends React.Component {
             </Form.Item>
             <img
               className="w-40"
-              src={`http://sz.xrdev.cn/inspection/gifCode?d=${this.state.imageCode}`}
+              src={`http://sz.xrdata.net/inspection/gifCode?d=${this.state.imageCode}`}
               onClick={() => {
                 this.setState({ imageCode: new Date().getTime() });
               }}

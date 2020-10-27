@@ -5,18 +5,15 @@ import { connect } from 'react-redux';
 const menuData = JSON.parse(sessionStorage.resources);
 const { SubMenu } = Menu;
 class Banner extends React.Component {
-  constructor(props) {
-    super();
-  }
   //=====================================无限递归菜单====================================//
-  handleRenderSubMenu = (menuItem) => {
+  handleRenderSubMenu = (menuItem: any) => {
     return (
       <SubMenu
         key={menuItem.id}
         icon={<AppstoreOutlined />}
         title={menuItem.text}
       >
-        {menuItem.children.map((item) => {
+        {menuItem.children.map((item: any) => {
           if (item.type === 'group' && menuItem.hasChildren) {
             return this.handleRenderSubMenu(item);
           } else {
@@ -27,10 +24,9 @@ class Banner extends React.Component {
     );
   };
   render() {
-    const { collapsed } = this.props;
+    const { collapsed }: any = this.props;
     return (
       <Menu
-        onClick={this.handleClick}
         style={{ width: collapsed ? 80 : 220 }}
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
@@ -38,7 +34,7 @@ class Banner extends React.Component {
         className="banner"
         inlineCollapsed={collapsed}
       >
-        {menuData.map((item) => {
+        {menuData.map((item: any) => {
           if (item.type === 'group' && item.hasChildren) {
             return this.handleRenderSubMenu(item);
           } else {
@@ -53,7 +49,7 @@ class Banner extends React.Component {
     );
   }
 }
-export default connect(({ layout }) => {
+export default connect(({ layout }: any) => {
   return {
     collapsed: layout.collapsed,
   };
