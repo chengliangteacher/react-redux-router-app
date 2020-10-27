@@ -3,7 +3,6 @@ import * as ApiIp from './ApiIp';
 import { notification } from 'antd';
 //=====================================全局配置====================================//
 axios.defaults.baseURL = ApiIp.developUrl; // 服务器地址
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 axios.defaults.headers.common['source'] = 'pc';
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 
@@ -16,7 +15,7 @@ axios.interceptors.request.use(
     return config;
   },
   function (error: AxiosError) {
-    // 对请求错误做些什么
+    //=====================================对请求错误做些什么====================================//
     return Promise.reject(error);
   }
 );
@@ -47,7 +46,7 @@ axios.interceptors.response.use(
     return Promise.reject(response.data);
   },
   function (error: AxiosError) {
-    // 对响应错误做点什么
+    //=====================================对响应错误做点什么====================================//
     notification.error({
       message: '服务器错误',
       description: '请联系管理员',

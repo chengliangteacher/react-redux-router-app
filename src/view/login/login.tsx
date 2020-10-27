@@ -34,11 +34,11 @@ export default class Login extends React.Component<props, stateTypes> {
     };
   }
   //=====================================文本框取值====================================//
-  handleChange = (e: any, key: any) => {
+  handleChange = (e: any, key: any): void => {
     this.formInfo[key] = e.target.value;
   };
   //=====================================登录====================================//
-  handleLogin = () => {
+  handleLogin = (): void => {
     this.setState({
       loading: true,
     });
@@ -55,13 +55,13 @@ export default class Login extends React.Component<props, stateTypes> {
         source: 'pc',
       },
     })
-      .then((res) => {
+      .then((res): void => {
         //=====================================储存用户信息与菜单====================================//
         sessionStorage.token = res.data.userInfo.token;
         sessionStorage.resources = JSON.stringify(res.data.resources.children);
         this.props.history.push('/v/a');
       })
-      .finally(() => {
+      .finally((): void => {
         this.setState({
           loading: false,
         });
@@ -130,7 +130,7 @@ export default class Login extends React.Component<props, stateTypes> {
             </Form.Item>
             <img
               className="w-40"
-              src={`http://sz.xrdata.net/inspection/gifCode?d=${this.state.imageCode}`}
+              src={`/inspection/gifCode?d=${this.state.imageCode}`}
               onClick={() => {
                 this.setState({ imageCode: new Date().getTime() });
               }}

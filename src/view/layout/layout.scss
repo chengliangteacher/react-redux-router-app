@@ -5,7 +5,7 @@
     background-color: white;
     display: flex;
     align-items: center;
-
+    justify-content: space-between;
     .header-left {
       display: flex;
 
@@ -21,6 +21,9 @@
           font-weight: bolder;
         }
       }
+    }
+    .header-right {
+      margin-right: 10px;
     }
   }
 

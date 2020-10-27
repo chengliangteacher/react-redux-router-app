@@ -11,29 +11,34 @@ import {
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import model from '../../../router/model';
 import ContextMenu from '../../../components/context-menu';
+interface tagItem {
+  pathname: string;
+  id: number;
+  isDel: boolean;
+}
 interface props {
   location: Location;
   history: any;
   dispatch: any;
-  tagDatas: any;
+  tagDatas: tagItem[];
 }
 class TagView extends React.Component<props> {
   public tagview: any;
   public interval: any;
-  componentDidMount() {
+  public componentDidMount() {
     this.handleAddRouter(this.props.location);
     this.handleListenRouter();
     this.tagview = React.createRef();
     this.interval = null;
   }
   //=====================================监听路由变化====================================//
-  handleListenRouter = () => {
+  public handleListenRouter = (): void => {
     this.props.history.listen((data: any) => {
       this.handleAddRouter(data);
     });
   };
   //=====================================新增路由到redux====================================//
-  handleAddRouter = (data: any) => {
+  public handleAddRouter = (data: any): void => {
     let routerData = data;
     //=====================================获取当前页面name====================================//
     model.forEach((item) => {
@@ -44,24 +49,24 @@ class TagView extends React.Component<props> {
     this.props.dispatch(judgeRouterRepeat(routerData, this.props.tagDatas));
   };
   //=====================================关闭标签====================================//
-  handleCloseTag = (val: any) => {
+  public handleCloseTag = (val: any): void => {
     this.props.dispatch(
       afterDeleteRouterTag(val, this.props.history, this.props.tagDatas)
     );
   };
   //=====================================关闭其它标签====================================//
-  handleCloseOtherTag = (val: any) => {
+  public handleCloseOtherTag = (val: any): void => {
     this.props.dispatch(
       afterDeleteOtherTag(val, this.props.history, this.props.tagDatas)
     );
   };
   //=====================================关闭所有标签====================================//
-  handleCloseAllTag = () => {
+  public handleCloseAllTag = (): void => {
     this.props.dispatch(deleteAllTag());
     this.props.history.push('/v/home');
   };
   //=====================================滚动条向左滚动====================================//
-  handleTurnScrollLeft = () => {
+  public handleTurnScrollLeft = (): void => {
     if (this.interval) {
       clearInterval(this.interval);
     }
@@ -76,7 +81,7 @@ class TagView extends React.Component<props> {
     }, 20);
   };
   //=====================================滚动条向左滚动====================================//
-  handleTurnScrollRight = () => {
+  public handleTurnScrollRight = (): void => {
     if (this.interval) {
       clearInterval(this.interval);
     }

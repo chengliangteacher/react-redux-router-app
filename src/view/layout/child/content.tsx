@@ -2,10 +2,10 @@ import React from 'react';
 import RouterItems from '../../../components/RouterItems';
 
 interface routerConfig {
-  path: string;
-  children: routerConfig[];
-  component: any;
-  redirect: boolean;
+  path?: string;
+  children?: routerConfig[];
+  component?: any;
+  redirect?: boolean;
 }
 interface props {
   routes: routerConfig[];

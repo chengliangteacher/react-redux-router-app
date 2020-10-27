@@ -8,18 +8,17 @@
 import React, { Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 interface routerConfig {
-  path: string | undefined;
-  children: routerConfig[] | undefined;
-  component: any | undefined;
-  redirect: boolean | undefined;
-  to: any;
-  title: string | undefined;
+  path?: string;
+  children?: routerConfig[];
+  component?: any;
+  redirect?: boolean;
+  title?: string;
 }
 interface props {
   routes: routerConfig[];
 }
-export default function RouterItems(props: any) {
-  const { routes } = props;
+export default function RouterItems(props: props) {
+  const { routes }: props = props;
   const istoken = sessionStorage.token ? true : false;
   return (
     <Suspense fallback={<div>Loading...</div>}>
