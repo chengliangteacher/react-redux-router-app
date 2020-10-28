@@ -6,6 +6,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .header-left {
       display: flex;
 
@@ -22,6 +23,7 @@
         }
       }
     }
+
     .header-right {
       margin-right: 10px;
     }
@@ -55,6 +57,7 @@
       display: flex;
       flex-wrap: nowrap;
       overflow-x: auto;
+
       &::-webkit-scrollbar {
         display: none;
       }
@@ -93,4 +96,33 @@
       }
     }
   }
+}
+
+.star-enter,
+star-appear {
+  margin-top: 800px;
+}
+
+.star-enter-active,
+star-appear-active {
+  margin-top: 0px;
+  transition: 0.5s ease-in;
+}
+
+.star-enter-done {
+  margin-top: 0;
+}
+
+//出场动画
+.star-exit {
+  margin-top: 800px;
+}
+
+.star-exit-active {
+  margin-top: 0px;
+  transition: 0.5s ease-in;
+}
+
+.fade-exit-done {
+  margin-top: 0px;
 }

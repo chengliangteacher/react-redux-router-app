@@ -5,6 +5,7 @@
     @params       
     @return       
 */
+
 //=====================================设置菜单折叠====================================//
 export const setCollapsed = () => {
   return {
@@ -18,8 +19,15 @@ export const setCollapsed = () => {
     @params       routerItem => 路由对象
     @return       
 */
+//=====================================tagview菜单数据类型====================================//
+export interface routerItemTypes {
+  pathname: string;
+  name?: string;
+  isDel?: boolean;
+  id?: number;
+}
 let routerTagId = 2;
-export const addRouterTag = (routerItem: any) => {
+export const addRouterTag = (routerItem: routerItemTypes) => {
   return {
     type: 'ADD_ROUTER_TAG',
     routerItem: { ...routerItem, id: routerTagId++, isDel: true },
@@ -32,9 +40,16 @@ export const addRouterTag = (routerItem: any) => {
     @params       routerItem -> 当前路由 tagsData -> 路由数据
     @return       
 */
-export const judgeRouterRepeat = (routerItem: any, tagsData: any) => {
+export const judgeRouterRepeat = (
+  routerItem: routerItemTypes,
+  tagsData: routerItemTypes[]
+) => {
   return (dispatch: any) => {
-    if (tagsData.some((item: any) => item.pathname === routerItem.pathname)) {
+    if (
+      tagsData.some(
+        (item: routerItemTypes) => item.pathname === routerItem.pathname
+      )
+    ) {
       return;
     } else {
       dispatch(addRouterTag(routerItem));
@@ -48,7 +63,7 @@ export const judgeRouterRepeat = (routerItem: any, tagsData: any) => {
     @params       id => 路由唯一标识符
     @return       
 */
-export const deleteRouterTag = (id: number) => {
+export const deleteRouterTag = (id?: number) => {
   return {
     type: 'DELETE_ROUTER_TAG',
     id,
@@ -62,9 +77,9 @@ export const deleteRouterTag = (id: number) => {
     @return       
 */
 export const afterDeleteRouterTag = (
-  router: any,
+  router: routerItemTypes,
   history: any,
-  tagsData: any
+  tagsData: routerItemTypes[]
 ) => {
   return (dispatch: any) => {
     if (router.pathname === history.location.pathname) {
@@ -80,7 +95,7 @@ export const afterDeleteRouterTag = (
 };
 
 //=====================================关闭其它tag====================================//
-export const deleteOtherTag = (id: number) => {
+export const deleteOtherTag = (id?: number) => {
   return {
     type: 'DELETE_OTHER_TAG',
     id,
@@ -88,9 +103,9 @@ export const deleteOtherTag = (id: number) => {
 };
 
 export const afterDeleteOtherTag = (
-  router: any,
+  router: routerItemTypes,
   history: any,
-  tagsData: any
+  tagsData: routerItemTypes[]
 ) => {
   return (dispatch: any) => {
     if (router.pathname !== history.location.pathname) {

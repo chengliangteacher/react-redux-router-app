@@ -1,6 +1,6 @@
 import a from './a';
 import b from './b';
-import todo from './todo';
 import home from './home';
-const model = [...a, ...b, ...todo, ...home];
+import test from './test';
+const model = [...a, ...b, ...home, ...test];
 export default model;

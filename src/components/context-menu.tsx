@@ -1,17 +1,21 @@
+/* 
+    @description  右键菜单
+    @autor        cheng liang
+    @create       2020-10-27 15:44"
+    @params       
+    @return       
+*/
 import React, { Component } from 'react';
+import { routerItemTypes } from '../redux/action/layout';
 
-interface routerConfig {
-  pathname: string;
-  id: number;
-}
 interface props {
-  handleCloseTag: (router: routerConfig) => void;
-  handleCloseOtherTag: (router: routerConfig) => void;
+  handleCloseTag: (router: routerItemTypes) => void;
+  handleCloseOtherTag: (router: routerItemTypes) => void;
   handleCloseAllTag: () => void;
 }
 interface statetype {
   visible: boolean;
-  currentRouter: routerConfig;
+  currentRouter: routerItemTypes;
 }
 class RightClickContextMenu extends Component<props, statetype> {
   public root: any;
@@ -29,14 +33,14 @@ class RightClickContextMenu extends Component<props, statetype> {
 
   componentDidMount() {
     //=====================================添加右键点击、点击事件监听====================================//
-    const element: any = document.getElementById('tag-view');
+    const element = document.getElementById('tag-view') as HTMLElement;
     element.addEventListener('contextmenu', this.handleContextMenu);
     document.addEventListener('click', this.handleClick);
   }
 
   componentWillUnmount() {
     //=====================================移除事件监听====================================//
-    const element: any = document.getElementById('tag-view');
+    const element = document.getElementById('tag-view') as HTMLElement;
     element.removeEventListener('contextmenu', this.handleContextMenu);
     document.removeEventListener('click', this.handleClick);
   }

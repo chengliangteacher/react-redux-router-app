@@ -11,21 +11,17 @@ import {
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import model from '../../../router/model';
 import ContextMenu from '../../../components/context-menu';
-interface tagItem {
-  pathname: string;
-  id: number;
-  isDel: boolean;
-}
+import { routerItemTypes } from '../../../redux/action/layout';
 interface props {
   location: Location;
   history: any;
   dispatch: any;
-  tagDatas: tagItem[];
+  tagDatas: routerItemTypes[];
 }
 class TagView extends React.Component<props> {
   public tagview: any;
   public interval: any;
-  public componentDidMount() {
+  componentDidMount() {
     this.handleAddRouter(this.props.location);
     this.handleListenRouter();
     this.tagview = React.createRef();
@@ -49,7 +45,7 @@ class TagView extends React.Component<props> {
     this.props.dispatch(judgeRouterRepeat(routerData, this.props.tagDatas));
   };
   //=====================================关闭标签====================================//
-  public handleCloseTag = (val: any): void => {
+  public handleCloseTag = (val: routerItemTypes): void => {
     this.props.dispatch(
       afterDeleteRouterTag(val, this.props.history, this.props.tagDatas)
     );
