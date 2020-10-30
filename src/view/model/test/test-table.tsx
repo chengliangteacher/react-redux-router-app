@@ -59,7 +59,7 @@ export default class TestTable extends React.Component<any, stateTypes> {
           state.pagination.pageSize = pageSize;
           return {
             tableData: res.data.map((item: dataItem, index: number) =>
-              Object.assign(item, { index })
+              Object.assign(item, { index: index + 1 })
             ),
             pagination: state.pagination,
           };

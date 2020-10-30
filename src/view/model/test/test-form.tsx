@@ -16,26 +16,52 @@ import {
 } from 'antd';
 import { connect } from 'react-redux';
 import axios from '../../../api';
+import { BaseDataTypes } from '../../../index.d';
+import { Store } from 'antd/lib/form/interface';
 const { Option } = Select;
 const { SHOW_PARENT } = TreeSelect;
 const formItemLayout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
 };
+interface companyItemType {
+  id: number;
+  companyName: string;
+}
+interface organItemType {
+  id: number;
+  orgName: string;
+}
 interface props {
-  foodTypesData: any;
-  planTypesData: any;
-  areaData: any;
-  areaAllData: any;
-  planTypesAllData: any;
+  foodTypesData: BaseDataTypes[];
+  planTypesData: BaseDataTypes[];
+  areaData: BaseDataTypes[];
+  areaAllData: BaseDataTypes[];
+  planTypesAllData: BaseDataTypes[];
 }
 interface stateTypes {
-  organizationsData: any;
-  companysData: any;
-  regulationPlansData: any;
-  feeTemplatesData: any;
+  organizationsData: organItemType[];
+  companysData: companyItemType[];
+  regulationPlansData: BaseDataTypes[];
+  feeTemplatesData: BaseDataTypes[];
   loading: boolean;
   feeTemplateLoading: boolean;
+}
+interface formTypes {
+  amount: number | null;
+  areaId: number[];
+  detectionCompanyId: number | null;
+  endDate: string;
+  feeTemplateId: number | null;
+  foodTypeId: number | null;
+  name: string;
+  planClassify: number;
+  planTypeId: number[];
+  ruleId: number | null;
+  sampleCompanyId: number | null;
+  specialWay: number;
+  taskSourceId: number | null;
+  year: string;
 }
 class TestForm extends React.Component<props, stateTypes> {
   public formInfo: any = {
@@ -150,11 +176,10 @@ class TestForm extends React.Component<props, stateTypes> {
   handleSave = () => {
     this.form.current
       .validateFields()
-      .then((value: any) => {
+      .then(() => {
         this.handleRequestSave();
       })
-      .catch((err: any) => {
-        console.log(err);
+      .catch(() => {
         notification.error({
           message: '表单提交失败',
           description: '请完善表单填写后再进行保存操作',
@@ -187,15 +212,20 @@ class TestForm extends React.Component<props, stateTypes> {
     this.setState({
       loading: true,
     });
-    const areaIds =
-      this.formInfo.areaId[0] === 3
-        ? this.props.areaData[0].children.map((item: any) => item.id).join(',')
-        : this.formInfo.areaId.join(',');
+    let areaIds: string = '';
+    if (this.props.areaData[0].children) {
+      areaIds =
+        this.formInfo.areaId[0] === 3
+          ? this.props.areaData[0].children
+              .map((item: BaseDataTypes) => item.id)
+              .join(',')
+          : this.formInfo.areaId.join(',');
+    }
     const areaNames = areaIds
       .split(',')
-      .map((item: any) => {
+      .map((item: string) => {
         let name = '';
-        this.props.areaAllData.forEach((val: any) => {
+        this.props.areaAllData.forEach((val: BaseDataTypes) => {
           if (Number(val.id) === Number(item)) {
             name = val.name;
           }
@@ -210,35 +240,35 @@ class TestForm extends React.Component<props, stateTypes> {
       areaNames,
       detectionCompanyId: this.formInfo.detectionCompanyId,
       detectionCompanyName: this.state.companysData.filter(
-        (item: any) => item.id === this.formInfo.detectionCompanyId
+        (item) => item.id === this.formInfo.detectionCompanyId
       )[0].companyName,
       endDate: this.formInfo.endDate,
       feeTemplateId: this.formInfo.feeTemplateId,
       foodTypeId: this.formInfo.foodTypeId,
       foodTypeName: this.props.foodTypesData.filter(
-        (item: any) => item.id === this.formInfo.foodTypeId
+        (item) => item.id === this.formInfo.foodTypeId
       )[0].name,
       name: this.formInfo.name,
       planClassify: this.formInfo.planClassify,
       planSmallTypeCode: this.props.planTypesAllData.filter(
-        (item: any) => item.id === this.formInfo.planTypeId[1]
+        (item) => item.id === this.formInfo.planTypeId[1]
       )[0].code,
       planSmallTypeId: this.formInfo.planTypeId[1],
       planSmallTypeName: this.props.planTypesAllData.filter(
-        (item: any) => item.id === this.formInfo.planTypeId[1]
+        (item) => item.id === this.formInfo.planTypeId[1]
       )[0].name,
       planTypeId: this.formInfo.planTypeId[0],
       planTypeName: this.props.planTypesAllData.filter(
-        (item: any) => item.id === this.formInfo.planTypeId[0]
+        (item) => item.id === this.formInfo.planTypeId[0]
       )[0].name,
       ruleId: this.formInfo.ruleId,
       sampleCompanyId: this.formInfo.sampleCompanyId,
       sampleCompanyName: this.state.companysData.filter(
-        (item: any) => item.id === this.formInfo.sampleCompanyId
+        (item) => item.id === this.formInfo.sampleCompanyId
       )[0].companyName,
       specialWay: this.formInfo.specialWay,
       taskSource: this.state.organizationsData.filter(
-        (item: any) => item.id === this.formInfo.taskSourceId
+        (item) => item.id === this.formInfo.taskSourceId
       )[0].orgName,
       taskSourceId: this.formInfo.taskSourceId,
       year: this.formInfo.year,
@@ -296,7 +326,7 @@ class TestForm extends React.Component<props, stateTypes> {
                   allowClear
                   placeholder="请选择食品类型"
                 >
-                  {foodTypesData.map((item: any) => {
+                  {foodTypesData.map((item: BaseDataTypes) => {
                     return (
                       <Option value={item.id} key={item.id}>
                         {item.name}
@@ -403,7 +433,7 @@ class TestForm extends React.Component<props, stateTypes> {
                   placeholder="请选择抽样机构"
                   className="w-100"
                 >
-                  {this.state.companysData.map((item: any) => {
+                  {this.state.companysData.map((item: companyItemType) => {
                     return (
                       <Option value={item.id} key={item.id}>
                         {item.companyName}
@@ -428,7 +458,7 @@ class TestForm extends React.Component<props, stateTypes> {
                   placeholder="请选择检验机构"
                   className="w-100"
                 >
-                  {this.state.companysData.map((item: any) => {
+                  {this.state.companysData.map((item: companyItemType) => {
                     return (
                       <Option value={item.id} key={item.id}>
                         {item.companyName}
@@ -453,7 +483,7 @@ class TestForm extends React.Component<props, stateTypes> {
                   placeholder="请选择任务来源"
                   className="w-100"
                 >
-                  {this.state.organizationsData.map((item: any) => {
+                  {this.state.organizationsData.map((item: organItemType) => {
                     return (
                       <Option value={item.id} key={item.id}>
                         {item.orgName}
@@ -508,7 +538,7 @@ class TestForm extends React.Component<props, stateTypes> {
                   placeholder="请选择校验规则"
                   className="w-100"
                 >
-                  {this.state.regulationPlansData.map((item: any) => {
+                  {this.state.regulationPlansData.map((item: BaseDataTypes) => {
                     return (
                       <Option value={item.id} key={item.id}>
                         {item.name}
@@ -536,7 +566,7 @@ class TestForm extends React.Component<props, stateTypes> {
                   }
                   placeholder="请选择价格模版"
                 >
-                  {this.state.feeTemplatesData.map((item: any) => {
+                  {this.state.feeTemplatesData.map((item: BaseDataTypes) => {
                     return (
                       <Option value={item.id} key={item.id}>
                         {item.name}
@@ -570,10 +600,10 @@ class TestForm extends React.Component<props, stateTypes> {
   }
 }
 //=====================================将redux中数据添加进props中====================================//
-const mapStateToProps = ({ layout }: any) => {
+const mapStateToProps = ({ layout }: Store) => {
   const data = layout.areaData
-    .filter((item: any) => item.id === 3)
-    .map((item: any) =>
+    .filter((item: BaseDataTypes) => item.id === 3)
+    .map((item: BaseDataTypes) =>
       Object.assign(item, {
         title: item.name,
         key: item.id,
@@ -581,7 +611,7 @@ const mapStateToProps = ({ layout }: any) => {
         value: item.id,
       })
     );
-  layout.areaData.forEach((item: any) => {
+  layout.areaData.forEach((item: BaseDataTypes) => {
     if (item.parentId === 3) {
       data[0].children.push(
         Object.assign(item, { title: item.name, value: item.id, key: item.id })
@@ -589,13 +619,13 @@ const mapStateToProps = ({ layout }: any) => {
     }
   });
   const data2 = layout.planTypesData
-    .filter((item: any) => !item.parentId)
-    .map((item: any) =>
+    .filter((item: BaseDataTypes) => !item.parentId)
+    .map((item: BaseDataTypes) =>
       Object.assign(item, { value: item.id, label: item.name, children: [] })
     )
-    .map((item: any) => {
-      layout.planTypesData.forEach((val: any) => {
-        if (val.parentId === item.id) {
+    .map((item: BaseDataTypes) => {
+      layout.planTypesData.forEach((val: BaseDataTypes) => {
+        if (val.parentId === item.id && item.children) {
           item.children.push(
             Object.assign(val, { value: val.id, label: val.name })
           );

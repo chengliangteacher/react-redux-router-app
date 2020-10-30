@@ -6,10 +6,12 @@ import {
   DownOutlined,
 } from '@ant-design/icons';
 import { Menu, Dropdown } from 'antd';
-import { setCollapsed } from '../../../redux/action/layout';
+import { requesGlobalData, setCollapsed } from '../../../redux/action/layout';
 import { RouteChildrenProps } from 'react-router-dom';
+import { Store } from 'antd/lib/form/interface';
 interface otherTypes {
   handleChangeCollapsed: () => void;
+  handleRequesGlobalData: () => void;
   collapsed: boolean;
 }
 type props = RouteChildrenProps & otherTypes;
@@ -20,7 +22,12 @@ class Header extends React.Component<props> {
     this.props.history.push('/login');
   };
   render() {
-    const { handleChangeCollapsed, collapsed } = this.props;
+    const {
+      handleChangeCollapsed,
+      collapsed,
+      handleRequesGlobalData,
+      history,
+    } = this.props;
     const menu = (
       <Menu>
         <Menu.Item>
@@ -46,7 +53,7 @@ class Header extends React.Component<props> {
             target="_blank"
             rel="noopener noreferrer"
             href="//#region "
-            onClick={(e: any) => this.handleLoginOut(e)}
+            onClick={(e) => this.handleLoginOut(e)}
           >
             退出登录
           </a>
@@ -56,7 +63,15 @@ class Header extends React.Component<props> {
     return (
       <div className="header">
         <div className="header-left">
-          <h3>react&react-redux&react-router-dom全家桶</h3>
+          <h2
+            className="cursor-pointer mx-1"
+            onClick={() => {
+              handleRequesGlobalData();
+              history.push('/v/home');
+            }}
+          >
+            react后台管理系统模版
+          </h2>
           <div>
             {collapsed ? (
               <MenuUnfoldOutlined
@@ -88,11 +103,8 @@ class Header extends React.Component<props> {
     );
   }
 }
-interface layoutTypes {
-  layout: { collapsed: boolean };
-}
 
-const mapStateToProps = ({ layout }: layoutTypes) => {
+const mapStateToProps = ({ layout }: Store) => {
   return {
     collapsed: layout.collapsed,
   };
@@ -101,6 +113,9 @@ const MapDispatchToPropsFunction = (dispatch: any) => {
   return {
     handleChangeCollapsed: () => {
       dispatch(setCollapsed());
+    },
+    handleRequesGlobalData: () => {
+      dispatch(requesGlobalData(true));
     },
   };
 };

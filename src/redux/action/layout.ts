@@ -137,23 +137,40 @@ export const requestGlobalLoading = (val: boolean) => {
   };
 };
 
-export const requesGlobalData = () => {
+/* 
+    @description  请求全局数据/从本地储存获取
+    @autor        cheng liang
+    @create       2020-10-30 14:31"
+    @params       
+    @return       
+*/
+export const requesGlobalData = (type: boolean | undefined = false) => {
   return (dispatch: any) => {
-    dispatch(requestGlobalLoading(true));
-    //=====================================地区====================================//
-    const areaData = axios.get('/areas/allTwo');
-    const foodTypesData = axios.get('/foodTypes/all');
-    const planTypesData = axios.get('/planTasks/planTypes');
-    Promise.allSettled([areaData, foodTypesData, planTypesData]).then((res) => {
-      const data = res.map((item) => {
-        let temp = [];
-        if (item.status === 'fulfilled') {
-          temp = item.value.data;
-        }
-        return temp;
-      });
+    if (sessionStorage.getItem('baseData') && !type) {
+      const data = JSON.parse(sessionStorage.getItem('baseData')!);
       dispatch(addGlobalData(data));
-      dispatch(requestGlobalLoading(false));
-    });
+    } else {
+      dispatch(requestGlobalLoading(true));
+      //=====================================地区====================================//
+      const areaData = axios.get('/areas/allTwo');
+      //=====================================食品类型====================================//
+      const foodTypesData = axios.get('/foodTypes/all');
+      //=====================================计划类型====================================//
+      const planTypesData = axios.get('/planTasks/planTypes');
+      Promise.allSettled([areaData, foodTypesData, planTypesData]).then(
+        (res) => {
+          const data = res.map((item) => {
+            let temp = [];
+            if (item.status === 'fulfilled') {
+              temp = item.value.data;
+            }
+            return temp;
+          });
+          sessionStorage.setItem('baseData', JSON.stringify(data));
+          dispatch(addGlobalData(data));
+          dispatch(requestGlobalLoading(false));
+        }
+      );
+    }
   };
 };

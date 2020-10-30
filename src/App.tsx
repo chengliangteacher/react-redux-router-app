@@ -8,7 +8,7 @@ import zhCN from 'antd/lib/locale/zh_CN';
 export default class App extends React.Component {
   render() {
     return (
-      <ConfigProvider locale={zhCN}>
+      <ConfigProvider locale={zhCN} componentSize="middle">
         <Provider store={store}>
           <RouterConfig />
         </Provider>

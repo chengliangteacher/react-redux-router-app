@@ -12,6 +12,7 @@ import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import model from '../../../router/model';
 import ContextMenu from '../../../components/context-menu';
 import { routerItemTypes, TypeProps } from '../../../index.d';
+import { Store } from 'antd/lib/form/interface';
 class TagView extends React.Component<TypeProps> {
   public tagview: any;
   public interval: any;
@@ -23,20 +24,22 @@ class TagView extends React.Component<TypeProps> {
   }
   //=====================================监听路由变化====================================//
   public handleListenRouter = (): void => {
-    this.props.history.listen((data: RouteChildrenProps) => {
+    this.props.history.listen((data: RouteChildrenProps['location']) => {
       this.handleAddRouter(data);
     });
   };
   //=====================================新增路由到redux====================================//
-  public handleAddRouter = (data: any): void => {
-    let routerData = data;
+  public handleAddRouter = (data: RouteChildrenProps['location']): void => {
+    let name = '';
     //=====================================获取当前页面name====================================//
     model.forEach((item) => {
       if (item.path === data.pathname) {
-        routerData.name = item.title;
+        name = item.title;
       }
     });
-    this.props.dispatch(judgeRouterRepeat(data, this.props.tagDatas));
+    this.props.dispatch(
+      judgeRouterRepeat({ ...data, name }, this.props.tagDatas)
+    );
   };
   //=====================================关闭标签====================================//
   public handleCloseTag = (val: routerItemTypes): void => {
@@ -45,7 +48,7 @@ class TagView extends React.Component<TypeProps> {
     );
   };
   //=====================================关闭其它标签====================================//
-  public handleCloseOtherTag = (val: any): void => {
+  public handleCloseOtherTag = (val: routerItemTypes): void => {
     this.props.dispatch(
       afterDeleteOtherTag(val, this.props.history, this.props.tagDatas)
     );
@@ -91,7 +94,7 @@ class TagView extends React.Component<TypeProps> {
       <div id="tag-view" className="tag-view">
         <StepBackwardOutlined onClick={this.handleTurnScrollLeft} />
         <div ref={this.tagview} className="tag-item">
-          {tagDatas.map((item: any, index: number) => {
+          {tagDatas.map((item: routerItemTypes, index: number) => {
             return (
               <Tag
                 key={index}
@@ -125,7 +128,7 @@ class TagView extends React.Component<TypeProps> {
   }
 }
 
-const mapStateToProps = ({ layout }: any) => {
+const mapStateToProps = ({ layout }: Store) => {
   return {
     tagDatas: layout.tagDatas,
   };

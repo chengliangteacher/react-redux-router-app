@@ -4,10 +4,7 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Card } from 'antd';
 import { RouteChildrenProps } from 'react-router-dom';
 import { routerConfigItemTypes } from '../../../index.d';
-interface routerConfigtypes {
-  routes: routerConfigItemTypes[];
-}
-type props = routerConfigtypes & RouteChildrenProps;
+type props = { routes: routerConfigItemTypes[] } & RouteChildrenProps;
 interface stateTypes {
   title: string;
   key: number;
@@ -20,18 +17,34 @@ export default class Content extends React.Component<props, stateTypes> {
       key: 1,
     };
   }
-  componentDidMount() {
-    this.props.history.listen((data: any) => {
+  //=====================================监听路由变化设置路由对应逻辑页面title====================================//
+  listenRouterSetTitle = () => {
+    this.props.history.listen((data: RouteChildrenProps['location']) => {
       this.setState((state: stateTypes) => {
+        let title = '';
+        this.props.routes.forEach((item) => {
+          if (item.path === data.pathname) {
+            title = item.title ? item.title : '';
+          }
+        });
         return {
-          title: data.name ? data.name : '',
+          title,
           key: state.key++,
         };
       });
     });
-    // this.setState({
-    //     title: this.props.location.name ? this.props.location.name : ""
-    // });
+    let title = '';
+    this.props.routes.forEach((item) => {
+      if (item.path === this.props.location.pathname) {
+        title = item.title ? item.title : '';
+      }
+    });
+    this.setState({
+      title,
+    });
+  };
+  componentDidMount() {
+    this.listenRouterSetTitle();
   }
   render() {
     const { title, key } = this.state;

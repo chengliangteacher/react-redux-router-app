@@ -26,6 +26,7 @@ export interface TypeProps {
 
 //=====================================路由对象数据类型====================================//
 export interface routerConfigItemTypes {
+  title?: string;
   path?: string;
   children?: routerConfigItemTypes[];
   component?: any;
@@ -41,9 +42,21 @@ export interface MenuItemTypes {
   children: Array<MenuItemTypes>;
 }
 
+//=====================================基础数据类型====================================//
+export interface BaseDataTypes {
+  id: number;
+  name: string;
+  parentId?: number | null;
+  children?: BaseDataTypes[];
+  code?: string;
+}
+
 //=====================================layout redux state数据类型====================================//
 export interface layoutReduxStateTypes {
   collapsed: boolean;
   tagDatas: routerItemTypes[];
   globalLoading: boolean;
+  areaData: BaseDataTypes[];
+  foodTypesData: BaseDataTypes[];
+  planTypesData: BaseDataTypes[];
 }
