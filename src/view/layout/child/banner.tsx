@@ -2,18 +2,19 @@ import React from 'react';
 import { Menu } from 'antd';
 import { MailOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
+import { MenuItemTypes } from '../../../index.d';
 const menuData = JSON.parse(sessionStorage.resources);
 const { SubMenu } = Menu;
 class Banner extends React.Component {
   //=====================================无限递归菜单====================================//
-  handleRenderSubMenu = (menuItem: any) => {
+  handleRenderSubMenu = (menuItem: MenuItemTypes) => {
     return (
       <SubMenu
         key={menuItem.id}
         icon={<AppstoreOutlined />}
         title={menuItem.text}
       >
-        {menuItem.children.map((item: any) => {
+        {menuItem.children.map((item: MenuItemTypes) => {
           if (item.type === 'group' && menuItem.hasChildren) {
             return this.handleRenderSubMenu(item);
           } else {
@@ -34,7 +35,7 @@ class Banner extends React.Component {
         className="banner"
         inlineCollapsed={collapsed}
       >
-        {menuData.map((item: any) => {
+        {menuData.map((item: MenuItemTypes) => {
           if (item.type === 'group' && item.hasChildren) {
             return this.handleRenderSubMenu(item);
           } else {

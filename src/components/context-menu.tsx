@@ -6,7 +6,7 @@
     @return       
 */
 import React, { Component } from 'react';
-import { routerItemTypes } from '../redux/action/layout';
+import { routerItemTypes } from '../index.d';
 
 interface props {
   handleCloseTag: (router: routerItemTypes) => void;

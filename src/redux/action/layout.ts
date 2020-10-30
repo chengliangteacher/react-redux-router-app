@@ -5,7 +5,8 @@
     @params       
     @return       
 */
-
+import axios from '../../api';
+import { routerItemTypes } from '../../index.d';
 //=====================================设置菜单折叠====================================//
 export const setCollapsed = () => {
   return {
@@ -20,12 +21,12 @@ export const setCollapsed = () => {
     @return       
 */
 //=====================================tagview菜单数据类型====================================//
-export interface routerItemTypes {
-  pathname: string;
-  name?: string;
-  isDel?: boolean;
-  id?: number;
-}
+// export interface routerItemTypes {
+//     pathname: string;
+//     name?: string;
+//     isDel?: boolean;
+//     id?: number;
+// }
 let routerTagId = 2;
 export const addRouterTag = (routerItem: routerItemTypes) => {
   return {
@@ -118,5 +119,41 @@ export const afterDeleteOtherTag = (
 export const deleteAllTag = () => {
   return {
     type: 'DELETE_ALL_TAG',
+  };
+};
+//=====================================添加全局数据====================================//
+export const addGlobalData = (data: any) => {
+  return {
+    type: 'ADD_GLOBAL_DATA',
+    data,
+  };
+};
+
+//=====================================请求全局数据loading状态====================================//
+export const requestGlobalLoading = (val: boolean) => {
+  return {
+    type: 'REQUEST_GLOBAL_LOADING',
+    loading: val,
+  };
+};
+
+export const requesGlobalData = () => {
+  return (dispatch: any) => {
+    dispatch(requestGlobalLoading(true));
+    //=====================================地区====================================//
+    const areaData = axios.get('/areas/allTwo');
+    const foodTypesData = axios.get('/foodTypes/all');
+    const planTypesData = axios.get('/planTasks/planTypes');
+    Promise.allSettled([areaData, foodTypesData, planTypesData]).then((res) => {
+      const data = res.map((item) => {
+        let temp = [];
+        if (item.status === 'fulfilled') {
+          temp = item.value.data;
+        }
+        return temp;
+      });
+      dispatch(addGlobalData(data));
+      dispatch(requestGlobalLoading(false));
+    });
   };
 };

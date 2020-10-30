@@ -13,6 +13,7 @@ interface dataItem {
   endDate: string;
   createDate: string;
   total: string | null;
+  index?: number;
 }
 interface stateTypes {
   loading: boolean;
@@ -46,6 +47,7 @@ export default class TestTable extends React.Component<any, stateTypes> {
   componentDidMount() {
     this.getTableData();
   }
+  //=====================================表格数据====================================//
   public getTableData = (pageNum: number = 1, pageSize: number = 20): void => {
     this.setState({ loading: true });
     axios
@@ -56,7 +58,9 @@ export default class TestTable extends React.Component<any, stateTypes> {
           state.pagination.current = pageNum;
           state.pagination.pageSize = pageSize;
           return {
-            tableData: res.data,
+            tableData: res.data.map((item: dataItem, index: number) =>
+              Object.assign(item, { index })
+            ),
             pagination: state.pagination,
           };
         });
@@ -76,59 +80,73 @@ export default class TestTable extends React.Component<any, stateTypes> {
       >
         <Column
           ellipsis={{ showTitle: true }}
+          title="序号"
+          dataIndex="index"
+          key="index"
+          align="center"
+          width={80}
+        />
+        <Column
+          ellipsis={{ showTitle: true }}
           title="计划名称"
           dataIndex="name"
           key="name"
+          align="center"
         />
         <Column
           ellipsis={{ showTitle: true }}
           title="食品类型"
           dataIndex="foodTypeName"
           key="foodTypeName"
+          align="center"
         />
         <Column
           ellipsis={{ showTitle: true }}
           title="计划类型"
           dataIndex="planTypeName"
           key="planTypeName"
+          align="center"
         />
         <Column
           ellipsis={{ showTitle: true }}
           title="计划年份"
           dataIndex="year"
           key="year"
+          align="center"
         />
         <Column
           ellipsis={{ showTitle: true }}
           title="检验单位"
           dataIndex="detectionCompanyName"
           key="detectionCompanyName"
+          align="center"
         />
         <Column
           ellipsis={{ showTitle: true }}
           title="计划截止时间"
           dataIndex="endDate"
           key="endDate"
+          align="center"
         />
         <Column
           ellipsis={{ showTitle: true }}
           title="创建时间"
           dataIndex="createDate"
           key="createDate"
-        />
-        <Column
-          ellipsis={{ showTitle: true }}
-          title="预算总费用(万元)"
-          dataIndex="total"
-          key="total"
+          align="center"
         />
         <Column
           ellipsis
           title="操作"
           key="action"
           render={() => {
-            return <Button type="text"></Button>;
+            return (
+              <Button type="primary" size="small">
+                提交
+              </Button>
+            );
           }}
+          align="center"
         />
       </Table>
     );

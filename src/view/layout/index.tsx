@@ -3,20 +3,20 @@ import Header from './child/header';
 import Banner from './child/banner';
 import Content from './child/content';
 import TagView from './child/tag-view';
+import { connect } from 'react-redux';
 import './layout.scss';
-interface routerConfig {
-  path?: string;
-  children?: routerConfig[];
-  component?: any;
-  redirect?: boolean;
-  title?: string;
+import { requesGlobalData } from '../../redux/action/layout';
+import { routerConfigItemTypes } from '../../index.d';
+import { RouteChildrenProps } from 'react-router-dom';
+interface othersTypes {
+  routes: routerConfigItemTypes[];
+  handleRequestGlobalData: () => void;
 }
-interface props {
-  location: Location;
-  history: History;
-  routes: routerConfig[];
-}
-export default class LayoutView extends React.Component<props> {
+type props = othersTypes & RouteChildrenProps;
+class LayoutView extends React.Component<props> {
+  componentDidMount() {
+    this.props.handleRequestGlobalData();
+  }
   render() {
     return (
       <div className="layout">
@@ -30,3 +30,13 @@ export default class LayoutView extends React.Component<props> {
     );
   }
 }
+
+const MapDispatchToPropsFunction = (dispatch: any) => {
+  return {
+    handleRequestGlobalData: () => {
+      dispatch(requesGlobalData());
+    },
+  };
+};
+
+export default connect(null, MapDispatchToPropsFunction)(LayoutView);

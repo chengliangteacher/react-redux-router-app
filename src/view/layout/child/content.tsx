@@ -1,31 +1,47 @@
 import React from 'react';
 import RouterItems from '../../../components/RouterItems';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-
-interface routerConfig {
-  path?: string;
-  children?: routerConfig[];
-  component?: any;
-  redirect?: boolean;
+import { Card } from 'antd';
+import { RouteChildrenProps } from 'react-router-dom';
+import { routerConfigItemTypes } from '../../../index.d';
+interface routerConfigtypes {
+  routes: routerConfigItemTypes[];
 }
-interface props {
-  routes: routerConfig[];
-  location: Location;
-  history: History;
+type props = routerConfigtypes & RouteChildrenProps;
+interface stateTypes {
+  title: string;
+  key: number;
 }
-export default class Content extends React.Component<props> {
+export default class Content extends React.Component<props, stateTypes> {
+  constructor(props: props) {
+    super(props);
+    this.state = {
+      title: '',
+      key: 1,
+    };
+  }
+  componentDidMount() {
+    this.props.history.listen((data: any) => {
+      this.setState((state: stateTypes) => {
+        return {
+          title: data.name ? data.name : '',
+          key: state.key++,
+        };
+      });
+    });
+    // this.setState({
+    //     title: this.props.location.name ? this.props.location.name : ""
+    // });
+  }
   render() {
+    const { title, key } = this.state;
     return (
       <TransitionGroup>
-        <CSSTransition
-          key={this.props.location.pathname}
-          timeout={1000}
-          classNames="star"
-        >
+        <CSSTransition key={key} timeout={1000} classNames="star" unmountOnExit>
           <div className="content">
-            <div className="w-100 h-100 bg-white">
+            <Card title={title} className="content-child">
               <RouterItems routes={this.props.routes} />
-            </div>
+            </Card>
           </div>
         </CSSTransition>
       </TransitionGroup>

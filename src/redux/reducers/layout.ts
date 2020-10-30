@@ -8,6 +8,10 @@ const initState = {
       isDel: false,
     },
   ],
+  globalLoading: false,
+  areaData: [],
+  foodTypesData: [],
+  planTypesData: [],
 };
 
 export default function layout(state = initState, action: any) {
@@ -37,6 +41,16 @@ export default function layout(state = initState, action: any) {
     case 'DELETE_ALL_TAG': {
       return Object.assign({}, state, {
         tagDatas: state.tagDatas.filter((item) => item.id === 1),
+      });
+    }
+    case 'REQUEST_GLOBAL_LOADING': {
+      return Object.assign({}, state, { globalLoading: action.loading });
+    }
+    case 'ADD_GLOBAL_DATA': {
+      return Object.assign({}, state, {
+        areaData: action.data[0],
+        foodTypesData: action.data[1],
+        planTypesData: action.data[2],
       });
     }
     default: {

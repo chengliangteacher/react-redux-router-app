@@ -23,7 +23,7 @@ axios.interceptors.request.use(
 //=====================================响应拦截器====================================//
 axios.interceptors.response.use(
   function (response: AxiosResponse) {
-    if (response.data.code === 200) {
+    if (response.data.code === 200 || response.data.success) {
       if (response.config.method !== 'get') {
         notification.success({
           message: '操作成功',

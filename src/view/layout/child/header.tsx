@@ -7,17 +7,20 @@ import {
 } from '@ant-design/icons';
 import { Menu, Dropdown } from 'antd';
 import { setCollapsed } from '../../../redux/action/layout';
-interface props {
-  history: any;
+import { RouteChildrenProps } from 'react-router-dom';
+interface otherTypes {
+  handleChangeCollapsed: () => void;
+  collapsed: boolean;
 }
+type props = RouteChildrenProps & otherTypes;
 class Header extends React.Component<props> {
-  public handleLoginOut = (e: any): void => {
+  public handleLoginOut = (e: { preventDefault: () => void }): void => {
     e.preventDefault();
     sessionStorage.clear();
     this.props.history.push('/login');
   };
   render() {
-    const { dispatch, collapsed }: any = this.props;
+    const { handleChangeCollapsed, collapsed } = this.props;
     const menu = (
       <Menu>
         <Menu.Item>
@@ -58,13 +61,13 @@ class Header extends React.Component<props> {
             {collapsed ? (
               <MenuUnfoldOutlined
                 onClick={() => {
-                  dispatch(setCollapsed());
+                  handleChangeCollapsed();
                 }}
               />
             ) : (
               <MenuFoldOutlined
                 onClick={() => {
-                  dispatch(setCollapsed());
+                  handleChangeCollapsed();
                 }}
               />
             )}
@@ -88,8 +91,17 @@ class Header extends React.Component<props> {
 interface layoutTypes {
   layout: { collapsed: boolean };
 }
-export default connect(({ layout }: layoutTypes) => {
+
+const mapStateToProps = ({ layout }: layoutTypes) => {
   return {
     collapsed: layout.collapsed,
   };
-})(Header);
+};
+const MapDispatchToPropsFunction = (dispatch: any) => {
+  return {
+    handleChangeCollapsed: () => {
+      dispatch(setCollapsed());
+    },
+  };
+};
+export default connect(mapStateToProps, MapDispatchToPropsFunction)(Header);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, RouteChildrenProps } from 'react-router-dom';
 import { Tag } from 'antd';
 import {
   judgeRouterRepeat,
@@ -11,14 +11,8 @@ import {
 import { StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import model from '../../../router/model';
 import ContextMenu from '../../../components/context-menu';
-import { routerItemTypes } from '../../../redux/action/layout';
-interface props {
-  location: Location;
-  history: any;
-  dispatch: any;
-  tagDatas: routerItemTypes[];
-}
-class TagView extends React.Component<props> {
+import { routerItemTypes, TypeProps } from '../../../index.d';
+class TagView extends React.Component<TypeProps> {
   public tagview: any;
   public interval: any;
   componentDidMount() {
@@ -29,7 +23,7 @@ class TagView extends React.Component<props> {
   }
   //=====================================监听路由变化====================================//
   public handleListenRouter = (): void => {
-    this.props.history.listen((data: any) => {
+    this.props.history.listen((data: RouteChildrenProps) => {
       this.handleAddRouter(data);
     });
   };
@@ -42,7 +36,7 @@ class TagView extends React.Component<props> {
         routerData.name = item.title;
       }
     });
-    this.props.dispatch(judgeRouterRepeat(routerData, this.props.tagDatas));
+    this.props.dispatch(judgeRouterRepeat(data, this.props.tagDatas));
   };
   //=====================================关闭标签====================================//
   public handleCloseTag = (val: routerItemTypes): void => {

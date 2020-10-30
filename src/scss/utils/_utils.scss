@@ -142,6 +142,9 @@ $align: (
 .text-nowrap {
   white-space: nowrap;
 }
+.overflow-auto {
+  overflow: auto;
+}
 
 //===================================沾满整个屏幕============================//
 .full-screen {
@@ -549,19 +552,19 @@ $spacer: 48 !default;
 $spacers: (
   '0': 0,
   '1': (
-    $spacer * 0.25 + px //12px,
+    $spacer * 0.25 + px //12px,,
   ),
   '2': (
-    $spacer * 0.5 + px //24px,
+    $spacer * 0.5 + px //24px,,
   ),
   '3': (
-    $spacer * 0.75 + px //36px,
+    $spacer * 0.75 + px //36px,,
   ),
   '4': (
-    $spacer * 1 + px //48px,
+    $spacer * 1 + px //48px,,
   ),
   '5': (
-    $spacer * 1.25 + px //60px,
+    $spacer * 1.25 + px //60px,,
   ),
 );
 $percent-spacers: (

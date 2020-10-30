@@ -41,6 +41,12 @@
     overflow: auto;
     padding: 10px;
     box-sizing: border-box;
+    .content-child {
+      width: 100%;
+      min-height: calc(100vh - 110px);
+      background-color: white;
+      background-size: 100%;
+    }
   }
 
   .tag-view {
