@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Bone extends Component {
-  componentDidMount() {}
-  render() {
-    return <div>page-Bone</div>;
-  }
+export default function () {
+  return <div>page-Bone</div>;
 }

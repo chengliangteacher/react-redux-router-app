@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Bsex extends Component {
-  componentDidMount() {}
-  render() {
-    return <div>page-Bsex</div>;
-  }
+export default function Bsex() {
+  return <div>page-Bsex</div>;
 }

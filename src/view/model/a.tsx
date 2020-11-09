@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Apage extends Component {
-  componentDidMount() {}
-  render() {
-    return <div>page-a</div>;
-  }
+export default function Apage() {
+  return <div>page-a</div>;
 }

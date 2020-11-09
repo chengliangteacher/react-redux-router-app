@@ -5,6 +5,7 @@
     @params       
     @return       
 */
+import { Store } from 'antd/lib/form/interface';
 import axios from '../../api';
 import { routerItemTypes } from '../../index.d';
 //=====================================设置菜单折叠====================================//
@@ -21,12 +22,6 @@ export const setCollapsed = () => {
     @return       
 */
 //=====================================tagview菜单数据类型====================================//
-// export interface routerItemTypes {
-//     pathname: string;
-//     name?: string;
-//     isDel?: boolean;
-//     id?: number;
-// }
 let routerTagId = 2;
 export const addRouterTag = (routerItem: routerItemTypes) => {
   return {
@@ -41,18 +36,15 @@ export const addRouterTag = (routerItem: routerItemTypes) => {
     @params       routerItem -> 当前路由 tagsData -> 路由数据
     @return       
 */
-export const judgeRouterRepeat = (
-  routerItem: routerItemTypes,
-  tagsData: routerItemTypes[]
-) => {
-  return (dispatch: any) => {
+export const judgeRouterRepeat = (routerItem: routerItemTypes) => {
+  return (dispatch: any, getState: () => Store) => {
+    const tagsData = getState().layout.tagDatas;
     if (
-      tagsData.some(
-        (item: routerItemTypes) => item.pathname === routerItem.pathname
-      )
+      tagsData.every(
+        (item: routerItemTypes) => item.pathname !== routerItem.pathname
+      ) &&
+      routerItem.pathname !== '/login'
     ) {
-      return;
-    } else {
       dispatch(addRouterTag(routerItem));
     }
   };
@@ -77,12 +69,10 @@ export const deleteRouterTag = (id?: number) => {
     @params       router=>当前router history=>路由 tagsData=>所有路由
     @return       
 */
-export const afterDeleteRouterTag = (
-  router: routerItemTypes,
-  history: any,
-  tagsData: routerItemTypes[]
-) => {
-  return (dispatch: any) => {
+export const afterDeleteRouterTag = (router: routerItemTypes, history: any) => {
+  return (dispatch: any, getState: () => Store) => {
+    const tagsData = getState().layout.tagDatas;
+    console.log(tagsData);
     if (router.pathname === history.location.pathname) {
       const index = tagsData.findIndex(
         (item: any) => item.pathname === router.pathname
@@ -103,11 +93,8 @@ export const deleteOtherTag = (id?: number) => {
   };
 };
 
-export const afterDeleteOtherTag = (
-  router: routerItemTypes,
-  history: any,
-  tagsData: routerItemTypes[]
-) => {
+//=====================================删除tag前====================================//
+export const afterDeleteOtherTag = (router: routerItemTypes, history: any) => {
   return (dispatch: any) => {
     if (router.pathname !== history.location.pathname) {
       history.push(router);

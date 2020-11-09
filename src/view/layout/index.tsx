@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './child/header';
 import Banner from './child/banner';
 import Content from './child/content';
@@ -13,22 +13,21 @@ interface othersTypes {
   handleRequestGlobalData: () => void;
 }
 type props = othersTypes & RouteChildrenProps;
-class LayoutView extends React.Component<props> {
-  componentDidMount() {
-    this.props.handleRequestGlobalData();
-  }
-  render() {
-    return (
-      <div className="layout">
-        <Header {...this.props} />
-        <Banner />
-        <div>
-          <TagView {...this.props} />
-          <Content {...this.props} />
-        </div>
+function LayoutView(props: props) {
+  useEffect(() => {
+    props.handleRequestGlobalData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <div className="layout">
+      <Header {...props} />
+      <Banner />
+      <div>
+        <TagView {...props} />
+        <Content {...props} />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 const MapDispatchToPropsFunction = (dispatch: any) => {

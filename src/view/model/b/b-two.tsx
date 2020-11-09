@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Btwo extends Component {
-  componentDidMount() {}
-  render() {
-    return <div>page-Btwo</div>;
-  }
+export default function Btwo() {
+  return <div>page-Btwo</div>;
 }

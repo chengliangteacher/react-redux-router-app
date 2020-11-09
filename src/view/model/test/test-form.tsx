@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Form,
   Input,
@@ -63,8 +63,14 @@ interface formTypes {
   taskSourceId: number | null;
   year: string;
 }
-class TestForm extends React.Component<props, stateTypes> {
-  public formInfo: any = {
+function TestForm(props: props) {
+  const [organizationsData, setOrganizationsData] = useState([]);
+  const [companysData, setCompanysData] = useState([]);
+  const [regulationPlansData, setRegulationPlansData] = useState([]);
+  const [feeTemplatesData, setFeeTemplatesData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [feeTemplateLoading, setFeeTemplateLoading] = useState(false);
+  let formInfo: any = {
     amount: 1,
     areaId: [],
     detectionCompanyId: null,
@@ -80,24 +86,10 @@ class TestForm extends React.Component<props, stateTypes> {
     taskSourceId: null,
     year: '',
   };
-  public form: any;
-  constructor(props: props) {
-    super(props);
-    this.state = {
-      organizationsData: [],
-      companysData: [],
-      regulationPlansData: [],
-      feeTemplatesData: [],
-      loading: false,
-      feeTemplateLoading: false,
-    };
-    this.form = React.createRef();
-  }
+  let form: any = React.createRef();
   //=====================================请求枚举数据====================================//
-  getPromiseData = () => {
-    this.setState({
-      loading: true,
-    });
+  let getPromiseData = () => {
+    setLoading(true);
     const organizations = axios.get('/plan/organizations');
     const companys = axios.get('/plan/companys');
     const regulationPlans = axios.get('/regulationPlans');
@@ -110,74 +102,64 @@ class TestForm extends React.Component<props, stateTypes> {
           }
           return temp;
         });
-        this.setState({
-          organizationsData: data[0],
-          companysData: data[1],
-          regulationPlansData: data[2],
-          loading: false,
-        });
+        setOrganizationsData(data[0]);
+        setCompanysData(data[1]);
+        setRegulationPlansData(data[2]);
+        setLoading(false);
       }
     );
   };
   //=====================================inputchange====================================//
-  handleInputChange = (e: any, key: string) => {
-    this.formInfo[key] = e.target.value;
+  let handleInputChange = (e: any, key: string) => {
+    formInfo[key] = e.target.value;
   };
   //=====================================selectchange====================================//
-  handleSelectChange = (value: any, key: string) => {
-    this.formInfo[key] = value;
+  let handleSelectChange = (value: any, key: string) => {
+    formInfo[key] = value;
     if (
       key === 'sampleCompanyId' ||
       key === 'detectionCompanyId' ||
       key === 'taskSourceId' ||
       key === 'planTypeId'
     ) {
-      this.getFeeTemplatesData();
+      getFeeTemplatesData();
     }
   };
   //=====================================获取价格模版数据====================================//
-  getFeeTemplatesData = () => {
+  let getFeeTemplatesData = () => {
     if (
-      !this.formInfo.sampleCompanyId ||
-      !this.formInfo.detectionCompanyId ||
-      !this.formInfo.taskSourceId ||
-      !this.formInfo.planTypeId.length
+      !formInfo.sampleCompanyId ||
+      !formInfo.detectionCompanyId ||
+      !formInfo.taskSourceId ||
+      !formInfo.planTypeId.length
     ) {
-      this.setState({
-        feeTemplatesData: [],
-      });
-      this.formInfo.feeTemplateId = null;
-      this.form.current.setFieldsValue({ feeTemplateId: null });
+      setFeeTemplatesData([]);
+      formInfo.feeTemplateId = null;
+      form.current.setFieldsValue({ feeTemplateId: null });
       return;
     }
-    this.setState({
-      feeTemplateLoading: true,
-    });
+    setFeeTemplateLoading(true);
     const params = {
-      sampleCompanyId: this.formInfo.sampleCompanyId,
-      detectionCompanyId: this.formInfo.detectionCompanyId,
-      taskSourceId: this.formInfo.taskSourceId,
-      planSmallTypeId: this.formInfo.planTypeId[2],
+      sampleCompanyId: formInfo.sampleCompanyId,
+      detectionCompanyId: formInfo.detectionCompanyId,
+      taskSourceId: formInfo.taskSourceId,
+      planSmallTypeId: formInfo.planTypeId[2],
     };
     axios
       .get('/plan/getFeeTemplates', { params })
       .then((res) => {
-        this.setState({
-          feeTemplatesData: res.data,
-        });
+        setFeeTemplatesData(res.data);
       })
       .finally(() => {
-        this.setState({
-          feeTemplateLoading: false,
-        });
+        setFeeTemplateLoading(false);
       });
   };
   //=====================================提交表单====================================//
-  handleSave = () => {
-    this.form.current
+  let handleSave = () => {
+    form.current
       .validateFields()
       .then(() => {
-        this.handleRequestSave();
+        handleRequestSave();
       })
       .catch(() => {
         notification.error({
@@ -188,9 +170,9 @@ class TestForm extends React.Component<props, stateTypes> {
       });
   };
   //=====================================重置表单====================================//
-  handleReset = () => {
-    this.form.current.resetFields();
-    this.formInfo = {
+  let handleReset = () => {
+    form.current.resetFields();
+    formInfo = {
       amount: 1,
       areaId: [],
       detectionCompanyId: null,
@@ -208,24 +190,22 @@ class TestForm extends React.Component<props, stateTypes> {
     };
   };
   //=====================================服务器保存====================================//
-  handleRequestSave = () => {
-    this.setState({
-      loading: true,
-    });
+  let handleRequestSave = () => {
+    setLoading(true);
     let areaIds: string = '';
-    if (this.props.areaData[0].children) {
+    if (props.areaData[0].children) {
       areaIds =
-        this.formInfo.areaId[0] === 3
-          ? this.props.areaData[0].children
+        formInfo.areaId[0] === 3
+          ? props.areaData[0].children
               .map((item: BaseDataTypes) => item.id)
               .join(',')
-          : this.formInfo.areaId.join(',');
+          : formInfo.areaId.join(',');
     }
     const areaNames = areaIds
       .split(',')
       .map((item: string) => {
         let name = '';
-        this.props.areaAllData.forEach((val: BaseDataTypes) => {
+        props.areaAllData.forEach((val: BaseDataTypes) => {
           if (Number(val.id) === Number(item)) {
             name = val.name;
           }
@@ -233,371 +213,361 @@ class TestForm extends React.Component<props, stateTypes> {
         return name;
       })
       .join(',');
+    let detectionCompanyName = '';
+    companysData.forEach((item: companyItemType) => {
+      if (item.id === formInfo.detectionCompanyId) {
+        detectionCompanyName = item.companyName;
+      }
+    });
+    let sampleCompanyName = '';
+    companysData.forEach((item: companyItemType) => {
+      if (item.id === formInfo.sampleCompanyId) {
+        sampleCompanyName = item.companyName;
+      }
+    });
+    let taskSource = '';
+    organizationsData.forEach((item: organItemType) => {
+      if (item.id === formInfo.taskSourceId) {
+        taskSource = item.orgName;
+      }
+    });
     const data = {
-      amount: this.formInfo.amount,
+      amount: formInfo.amount,
       areaId: 3,
       areaIds,
       areaNames,
-      detectionCompanyId: this.formInfo.detectionCompanyId,
-      detectionCompanyName: this.state.companysData.filter(
-        (item) => item.id === this.formInfo.detectionCompanyId
-      )[0].companyName,
-      endDate: this.formInfo.endDate,
-      feeTemplateId: this.formInfo.feeTemplateId,
-      foodTypeId: this.formInfo.foodTypeId,
-      foodTypeName: this.props.foodTypesData.filter(
-        (item) => item.id === this.formInfo.foodTypeId
+      detectionCompanyId: formInfo.detectionCompanyId,
+      detectionCompanyName,
+      endDate: formInfo.endDate,
+      feeTemplateId: formInfo.feeTemplateId,
+      foodTypeId: formInfo.foodTypeId,
+      foodTypeName: props.foodTypesData.filter(
+        (item) => item.id === formInfo.foodTypeId
       )[0].name,
-      name: this.formInfo.name,
-      planClassify: this.formInfo.planClassify,
-      planSmallTypeCode: this.props.planTypesAllData.filter(
-        (item) => item.id === this.formInfo.planTypeId[1]
+      name: formInfo.name,
+      planClassify: formInfo.planClassify,
+      planSmallTypeCode: props.planTypesAllData.filter(
+        (item) => item.id === formInfo.planTypeId[1]
       )[0].code,
-      planSmallTypeId: this.formInfo.planTypeId[1],
-      planSmallTypeName: this.props.planTypesAllData.filter(
-        (item) => item.id === this.formInfo.planTypeId[1]
+      planSmallTypeId: formInfo.planTypeId[1],
+      planSmallTypeName: props.planTypesAllData.filter(
+        (item) => item.id === formInfo.planTypeId[1]
       )[0].name,
-      planTypeId: this.formInfo.planTypeId[0],
-      planTypeName: this.props.planTypesAllData.filter(
-        (item) => item.id === this.formInfo.planTypeId[0]
+      planTypeId: formInfo.planTypeId[0],
+      planTypeName: props.planTypesAllData.filter(
+        (item) => item.id === formInfo.planTypeId[0]
       )[0].name,
-      ruleId: this.formInfo.ruleId,
-      sampleCompanyId: this.formInfo.sampleCompanyId,
-      sampleCompanyName: this.state.companysData.filter(
-        (item) => item.id === this.formInfo.sampleCompanyId
-      )[0].companyName,
-      specialWay: this.formInfo.specialWay,
-      taskSource: this.state.organizationsData.filter(
-        (item) => item.id === this.formInfo.taskSourceId
-      )[0].orgName,
-      taskSourceId: this.formInfo.taskSourceId,
-      year: this.formInfo.year,
+      ruleId: formInfo.ruleId,
+      sampleCompanyId: formInfo.sampleCompanyId,
+      sampleCompanyName,
+      specialWay: formInfo.specialWay,
+      taskSource,
+      taskSourceId: formInfo.taskSourceId,
+      year: formInfo.year,
     };
     axios
       .post('/plans', data)
       .then((res) => {})
       .finally(() => {
-        this.setState({
-          loading: false,
-        });
+        setLoading(false);
       });
   };
-  componentDidMount() {
-    this.getPromiseData();
-  }
-  render() {
-    const { foodTypesData, planTypesData, areaData } = this.props;
-    return (
-      <div>
-        <Form
-          ref={this.form}
-          labelAlign="left"
-          {...formItemLayout}
-          initialValues={{ amount: 1, planClassify: 1, specialWay: 0 }}
-          layout="horizontal"
-          scrollToFirstError={true}
-        >
-          <Row gutter={10}>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="计划名称"
-                name="name"
-                rules={[{ required: true, message: '请输入计划名称' }]}
-              >
-                <Input
-                  disabled={this.state.loading}
-                  onChange={(e) => this.handleInputChange(e, 'name')}
-                  allowClear
-                  placeholder="请输入计划名称"
-                />
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="食品类型"
-                name="foodTypeId"
-                rules={[{ required: true, message: '请选择食品类型' }]}
-              >
-                <Select
-                  disabled={this.state.loading}
-                  onChange={(value) =>
-                    this.handleSelectChange(value, 'foodTypeId')
-                  }
-                  allowClear
-                  placeholder="请选择食品类型"
-                >
-                  {foodTypesData.map((item: BaseDataTypes) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="计划类型"
-                name="planTypeId"
-                rules={[{ required: true, message: '请选择计划类型' }]}
-              >
-                <Cascader
-                  options={planTypesData}
-                  className="w-100"
-                  onChange={(value) =>
-                    this.handleSelectChange(value, 'planTypeId')
-                  }
-                  placeholder="请选择计划类型"
-                />
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="计划年份"
-                name="year"
-                rules={[{ required: true, message: '请选择计划年份' }]}
-              >
-                <DatePicker
-                  disabled={this.state.loading}
-                  picker="year"
-                  onChange={(data, value) =>
-                    this.handleSelectChange(value, 'year')
-                  }
-                  allowClear
-                  className="w-100"
-                />
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="计划地区"
-                name="areaId"
-                rules={[{ required: true, message: '请选择计划地区' }]}
-              >
-                <TreeSelect
-                  disabled={this.state.loading}
-                  treeData={areaData}
-                  onChange={(value) => this.handleSelectChange(value, 'areaId')}
-                  treeCheckable={true}
-                  showCheckedStrategy={SHOW_PARENT}
-                  placeholder="请选择计划地区"
-                  maxTagCount={2}
-                  className="w-100"
-                />
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="计划截止时间"
-                name="endDate"
-                rules={[{ required: true, message: '请选择计划截止时间' }]}
-              >
-                <DatePicker
-                  disabled={this.state.loading}
-                  onChange={(date, value) =>
-                    this.handleSelectChange(value, 'endDate')
-                  }
-                  format="YYYY-MM-DD hh:mm:ss"
-                  showTime
-                  className="w-100"
-                />
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="计划总批次"
-                name="amount"
-                rules={[{ required: true, message: '请输入计划总批次' }]}
-              >
-                <InputNumber
-                  disabled={this.state.loading}
-                  min={1}
-                  onChange={(value) => this.handleSelectChange(value, 'amount')}
-                  className="w-100"
-                />
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="抽样机构"
-                name="sampleCompanyId"
-                rules={[{ required: true, message: '请选择抽样机构' }]}
-              >
-                <Select
-                  disabled={this.state.loading}
-                  allowClear
-                  onChange={(value) =>
-                    this.handleSelectChange(value, 'sampleCompanyId')
-                  }
-                  placeholder="请选择抽样机构"
-                  className="w-100"
-                >
-                  {this.state.companysData.map((item: companyItemType) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.companyName}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="检验机构"
-                name="detectionCompanyId"
-                rules={[{ required: true, message: '请选择检验机构' }]}
-              >
-                <Select
-                  disabled={this.state.loading}
-                  allowClear
-                  onChange={(value) =>
-                    this.handleSelectChange(value, 'detectionCompanyId')
-                  }
-                  placeholder="请选择检验机构"
-                  className="w-100"
-                >
-                  {this.state.companysData.map((item: companyItemType) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.companyName}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="任务来源"
-                name="taskSourceId"
-                rules={[{ required: true, message: '请选择任务来源' }]}
-              >
-                <Select
-                  disabled={this.state.loading}
-                  allowClear
-                  onChange={(value) =>
-                    this.handleSelectChange(value, 'taskSourceId')
-                  }
-                  placeholder="请选择任务来源"
-                  className="w-100"
-                >
-                  {this.state.organizationsData.map((item: organItemType) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.orgName}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="制定类型"
-                name="planClassify"
-                rules={[{ required: true, message: '请选择制定类型' }]}
-              >
-                <Radio.Group
-                  disabled={this.state.loading}
-                  onChange={(e) => this.handleInputChange(e, 'planClassify')}
-                  className="w-100"
-                >
-                  <Radio value={1}>食品分类</Radio>
-                  <Radio value={2}>受检单位</Radio>
-                </Radio.Group>
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="特殊下达"
-                name="specialWay"
-                rules={[{ required: true, message: '请选择特殊下达' }]}
-              >
-                <Radio.Group
-                  disabled={this.state.loading}
-                  onChange={(e) => this.handleInputChange(e, 'specialWay')}
-                  className="w-100"
-                >
-                  <Radio value={1}>是</Radio>
-                  <Radio value={0}>否</Radio>
-                </Radio.Group>
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="校验规则"
-                name="ruleId"
-                rules={[{ required: true, message: '请选择校验规则' }]}
-              >
-                <Select
-                  disabled={this.state.loading}
-                  allowClear
-                  onChange={(value) => this.handleSelectChange(value, 'ruleId')}
-                  placeholder="请选择校验规则"
-                  className="w-100"
-                >
-                  {this.state.regulationPlansData.map((item: BaseDataTypes) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
-              <Form.Item
-                label="价格模版"
-                name="feeTemplateId"
-                rules={[{ required: true, message: '请选择价格模版' }]}
-              >
-                <Select
-                  disabled={
-                    this.state.loading ||
-                    this.state.feeTemplateLoading ||
-                    !this.state.feeTemplatesData.length
-                  }
-                  allowClear
-                  onChange={(value) =>
-                    this.handleSelectChange(value, 'feeTemplateId')
-                  }
-                  placeholder="请选择价格模版"
-                >
-                  {this.state.feeTemplatesData.map((item: BaseDataTypes) => {
-                    return (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Divider orientation="right">
-            <Button
-              loading={this.state.loading}
-              type="primary"
-              className="mr-1"
-              onClick={this.handleSave}
+  useEffect(() => {
+    getPromiseData();
+  }, []);
+  const { foodTypesData, planTypesData, areaData } = props;
+  return (
+    <div>
+      <Form
+        ref={form}
+        labelAlign="left"
+        {...formItemLayout}
+        initialValues={{ amount: 1, planClassify: 1, specialWay: 0 }}
+        layout="horizontal"
+        scrollToFirstError={true}
+      >
+        <Row gutter={10}>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="计划名称"
+              name="name"
+              rules={[{ required: true, message: '请输入计划名称' }]}
             >
-              保存
-            </Button>
-            <Button
-              htmlType="button"
-              loading={this.state.loading}
-              onClick={this.handleReset}
+              <Input
+                disabled={loading}
+                onChange={(e) => handleInputChange(e, 'name')}
+                allowClear
+                placeholder="请输入计划名称"
+              />
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="食品类型"
+              name="foodTypeId"
+              rules={[{ required: true, message: '请选择食品类型' }]}
             >
-              重置
-            </Button>
-          </Divider>
-        </Form>
-      </div>
-    );
-  }
+              <Select
+                disabled={loading}
+                onChange={(value) => handleSelectChange(value, 'foodTypeId')}
+                allowClear
+                placeholder="请选择食品类型"
+              >
+                {foodTypesData.map((item: BaseDataTypes) => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="计划类型"
+              name="planTypeId"
+              rules={[{ required: true, message: '请选择计划类型' }]}
+            >
+              <Cascader
+                options={planTypesData}
+                className="w-100"
+                onChange={(value) => handleSelectChange(value, 'planTypeId')}
+                placeholder="请选择计划类型"
+              />
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="计划年份"
+              name="year"
+              rules={[{ required: true, message: '请选择计划年份' }]}
+            >
+              <DatePicker
+                disabled={loading}
+                picker="year"
+                onChange={(data, value) => handleSelectChange(value, 'year')}
+                allowClear
+                className="w-100"
+              />
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="计划地区"
+              name="areaId"
+              rules={[{ required: true, message: '请选择计划地区' }]}
+            >
+              <TreeSelect
+                disabled={loading}
+                treeData={areaData}
+                onChange={(value) => handleSelectChange(value, 'areaId')}
+                treeCheckable={true}
+                showCheckedStrategy={SHOW_PARENT}
+                placeholder="请选择计划地区"
+                maxTagCount={2}
+                className="w-100"
+              />
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="计划截止时间"
+              name="endDate"
+              rules={[{ required: true, message: '请选择计划截止时间' }]}
+            >
+              <DatePicker
+                disabled={loading}
+                onChange={(date, value) => handleSelectChange(value, 'endDate')}
+                format="YYYY-MM-DD hh:mm:ss"
+                showTime
+                className="w-100"
+              />
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="计划总批次"
+              name="amount"
+              rules={[{ required: true, message: '请输入计划总批次' }]}
+            >
+              <InputNumber
+                disabled={loading}
+                min={1}
+                onChange={(value) => handleSelectChange(value, 'amount')}
+                className="w-100"
+              />
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="抽样机构"
+              name="sampleCompanyId"
+              rules={[{ required: true, message: '请选择抽样机构' }]}
+            >
+              <Select
+                disabled={loading}
+                allowClear
+                onChange={(value) =>
+                  handleSelectChange(value, 'sampleCompanyId')
+                }
+                placeholder="请选择抽样机构"
+                className="w-100"
+              >
+                {companysData.map((item: companyItemType) => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.companyName}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="检验机构"
+              name="detectionCompanyId"
+              rules={[{ required: true, message: '请选择检验机构' }]}
+            >
+              <Select
+                disabled={loading}
+                allowClear
+                onChange={(value) =>
+                  handleSelectChange(value, 'detectionCompanyId')
+                }
+                placeholder="请选择检验机构"
+                className="w-100"
+              >
+                {companysData.map((item: companyItemType) => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.companyName}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="任务来源"
+              name="taskSourceId"
+              rules={[{ required: true, message: '请选择任务来源' }]}
+            >
+              <Select
+                disabled={loading}
+                allowClear
+                onChange={(value) => handleSelectChange(value, 'taskSourceId')}
+                placeholder="请选择任务来源"
+                className="w-100"
+              >
+                {organizationsData.map((item: organItemType) => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.orgName}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="制定类型"
+              name="planClassify"
+              rules={[{ required: true, message: '请选择制定类型' }]}
+            >
+              <Radio.Group
+                disabled={loading}
+                onChange={(e) => handleInputChange(e, 'planClassify')}
+                className="w-100"
+              >
+                <Radio value={1}>食品分类</Radio>
+                <Radio value={2}>受检单位</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="特殊下达"
+              name="specialWay"
+              rules={[{ required: true, message: '请选择特殊下达' }]}
+            >
+              <Radio.Group
+                disabled={loading}
+                onChange={(e) => handleInputChange(e, 'specialWay')}
+                className="w-100"
+              >
+                <Radio value={1}>是</Radio>
+                <Radio value={0}>否</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="校验规则"
+              name="ruleId"
+              rules={[{ required: true, message: '请选择校验规则' }]}
+            >
+              <Select
+                disabled={loading}
+                allowClear
+                onChange={(value) => handleSelectChange(value, 'ruleId')}
+                placeholder="请选择校验规则"
+                className="w-100"
+              >
+                {regulationPlansData.map((item: BaseDataTypes) => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xxl={6} xl={8} lg={12} md={24} sm={24} xs={24}>
+            <Form.Item
+              label="价格模版"
+              name="feeTemplateId"
+              rules={[{ required: true, message: '请选择价格模版' }]}
+            >
+              <Select
+                disabled={
+                  loading || feeTemplateLoading || !feeTemplatesData.length
+                }
+                allowClear
+                onChange={(value) => handleSelectChange(value, 'feeTemplateId')}
+                placeholder="请选择价格模版"
+              >
+                {feeTemplatesData.map((item: BaseDataTypes) => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Divider orientation="right">
+          <Button
+            loading={loading}
+            type="primary"
+            className="mr-1"
+            onClick={handleSave}
+          >
+            保存
+          </Button>
+          <Button htmlType="button" loading={loading} onClick={handleReset}>
+            重置
+          </Button>
+        </Divider>
+      </Form>
+    </div>
+  );
 }
 //=====================================将redux中数据添加进props中====================================//
 const mapStateToProps = ({ layout }: Store) => {

@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Bseven extends Component {
-  componentDidMount() {}
-  render() {
-    return <div>page-Bseven</div>;
-  }
+export default function Bseven() {
+  return <div>page-Bseven</div>;
 }

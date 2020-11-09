@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import RouterItems from '../../../components/RouterItems';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Card } from 'antd';
@@ -9,55 +9,33 @@ interface stateTypes {
   title: string;
   key: number;
 }
-export default class Content extends React.Component<props, stateTypes> {
-  constructor(props: props) {
-    super(props);
-    this.state = {
-      title: '',
-      key: 1,
-    };
-  }
-  //=====================================监听路由变化设置路由对应逻辑页面title====================================//
-  listenRouterSetTitle = () => {
-    this.props.history.listen((data: RouteChildrenProps['location']) => {
-      this.setState((state: stateTypes) => {
-        let title = '';
-        this.props.routes.forEach((item) => {
-          if (item.path === data.pathname) {
-            title = item.title ? item.title : '';
-          }
-        });
-        return {
-          title,
-          key: state.key++,
-        };
+export default function Content(props: props) {
+  const [title, setTitle] = useState('');
+  const [key, setKey] = useState(1);
+  useEffect(() => {
+    //=====================================监听路由变化设置路由对应逻辑页面title====================================//
+    props.history.listen((data: RouteChildrenProps['location']) => {
+      let text = '';
+      props.routes.forEach((item) => {
+        if (item.path === data.pathname) {
+          text = item.title ? item.title : '';
+        }
       });
-    });
-    let title = '';
-    this.props.routes.forEach((item) => {
-      if (item.path === this.props.location.pathname) {
-        title = item.title ? item.title : '';
+      if (text) {
+        setTitle(text);
+        setKey(key + 1);
       }
     });
-    this.setState({
-      title,
-    });
-  };
-  componentDidMount() {
-    this.listenRouterSetTitle();
-  }
-  render() {
-    const { title, key } = this.state;
-    return (
-      <TransitionGroup>
-        <CSSTransition key={key} timeout={1000} classNames="star" unmountOnExit>
-          <div className="content">
-            <Card title={title} className="content-child">
-              <RouterItems routes={this.props.routes} />
-            </Card>
-          </div>
-        </CSSTransition>
-      </TransitionGroup>
-    );
-  }
+  });
+  return (
+    <TransitionGroup>
+      <CSSTransition key={1} timeout={1000} classNames="star" unmountOnExit>
+        <div className="content">
+          <Card title={title} className="content-child">
+            <RouterItems routes={props.routes} />
+          </Card>
+        </div>
+      </CSSTransition>
+    </TransitionGroup>
+  );
 }

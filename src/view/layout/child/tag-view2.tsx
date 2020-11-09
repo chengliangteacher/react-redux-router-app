@@ -31,6 +31,7 @@ function TagView(props: TypeProps) {
         name = item.title;
       }
     });
+    console.log(props.tagDatas);
     props.dispatch(judgeRouterRepeat({ ...data, name }));
   };
   //=====================================关闭标签====================================//

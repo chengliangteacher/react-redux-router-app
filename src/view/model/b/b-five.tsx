@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Bfive extends Component {
-  componentDidMount() {}
-  render() {
-    return <div>page-Bfive</div>;
-  }
+export default function Bfive() {
+  return <div>page-Bfive</div>;
 }
