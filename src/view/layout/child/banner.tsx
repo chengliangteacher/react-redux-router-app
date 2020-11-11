@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Menu } from 'antd';
 import { MailOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ const menuData = JSON.parse(sessionStorage.resources);
 const { SubMenu } = Menu;
 interface props {
   collapsed: boolean;
+  handleChangeBannerWith: (val: () => void) => void;
 }
 function Banner(props: props) {
   const { collapsed } = props;
@@ -29,9 +30,25 @@ function Banner(props: props) {
       </SubMenu>
     );
   };
+  useEffect(() => {
+    props.handleChangeBannerWith(handleChangeBannerWith);
+  });
+  let handleChangeBannerWith = () => {
+    const element = document.getElementById('banner');
+    if (element) {
+      if (element.style.left === '' || element.style.left === '-220px') {
+        element.style.left = '0px';
+        element.style.boxShadow = '10px 0px 6px #b6b6b6';
+      } else {
+        element.style.left = '-220px';
+        element.style.boxShadow = 'none';
+      }
+    }
+  };
   //=====================================reactnode====================================//
   return (
     <Menu
+      id="banner"
       style={{ width: collapsed ? 80 : 220 }}
       defaultSelectedKeys={['1']}
       defaultOpenKeys={['sub1']}

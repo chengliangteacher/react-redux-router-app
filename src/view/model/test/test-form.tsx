@@ -32,6 +32,7 @@ interface organItemType {
   id: number;
   orgName: string;
 }
+//=====================================props类型声明====================================//
 interface props {
   foodTypesData: BaseDataTypes[];
   planTypesData: BaseDataTypes[];
@@ -39,14 +40,7 @@ interface props {
   areaAllData: BaseDataTypes[];
   planTypesAllData: BaseDataTypes[];
 }
-interface stateTypes {
-  organizationsData: organItemType[];
-  companysData: companyItemType[];
-  regulationPlansData: BaseDataTypes[];
-  feeTemplatesData: BaseDataTypes[];
-  loading: boolean;
-  feeTemplateLoading: boolean;
-}
+//=====================================表单类型声明====================================//
 interface formTypes {
   amount: number | null;
   areaId: number[];
@@ -64,12 +58,20 @@ interface formTypes {
   year: string;
 }
 function TestForm(props: props) {
-  const [organizationsData, setOrganizationsData] = useState([]);
-  const [companysData, setCompanysData] = useState([]);
-  const [regulationPlansData, setRegulationPlansData] = useState([]);
-  const [feeTemplatesData, setFeeTemplatesData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [feeTemplateLoading, setFeeTemplateLoading] = useState(false);
+  /* 
+        @description  页面响应data
+        @autor        cheng liang
+        @create       2020-11-10 09:12"
+        @params       
+        @return       
+    */
+  const [organizationsData, setOrganizationsData] = useState([]); // 任务来源下拉
+  const [companysData, setCompanysData] = useState([]); // 检验，抽样机构下拉
+  const [regulationPlansData, setRegulationPlansData] = useState([]); // 校验规则下拉
+  const [feeTemplatesData, setFeeTemplatesData] = useState([]); // 价格模版下拉
+  const [loading, setLoading] = useState(false); // 页面加载小圈圈
+  const [feeTemplateLoading, setFeeTemplateLoading] = useState(false); // 价格模版加载小圈圈
+  //=====================================表单form====================================//
   let formInfo: any = {
     amount: 1,
     areaId: [],
@@ -86,7 +88,7 @@ function TestForm(props: props) {
     taskSourceId: null,
     year: '',
   };
-  let form: any = React.createRef();
+  let form: any; // 表单ref
   //=====================================请求枚举数据====================================//
   let getPromiseData = () => {
     setLoading(true);
@@ -133,9 +135,9 @@ function TestForm(props: props) {
       !formInfo.taskSourceId ||
       !formInfo.planTypeId.length
     ) {
-      setFeeTemplatesData([]);
+      // setFeeTemplatesData([]);
       formInfo.feeTemplateId = null;
-      form.current.setFieldsValue({ feeTemplateId: null });
+      form.setFieldsValue({ feeTemplateId: null });
       return;
     }
     setFeeTemplateLoading(true);
@@ -156,7 +158,7 @@ function TestForm(props: props) {
   };
   //=====================================提交表单====================================//
   let handleSave = () => {
-    form.current
+    form
       .validateFields()
       .then(() => {
         handleRequestSave();
@@ -171,7 +173,7 @@ function TestForm(props: props) {
   };
   //=====================================重置表单====================================//
   let handleReset = () => {
-    form.current.resetFields();
+    form.resetFields();
     formInfo = {
       amount: 1,
       areaId: [],
@@ -275,11 +277,12 @@ function TestForm(props: props) {
   useEffect(() => {
     getPromiseData();
   }, []);
+  //=====================================结果redux全局数据====================================//
   const { foodTypesData, planTypesData, areaData } = props;
   return (
     <div>
       <Form
-        ref={form}
+        ref={(ref) => (form = ref)}
         labelAlign="left"
         {...formItemLayout}
         initialValues={{ amount: 1, planClassify: 1, specialWay: 0 }}
@@ -569,7 +572,7 @@ function TestForm(props: props) {
     </div>
   );
 }
-//=====================================将redux中数据添加进props中====================================//
+//=====================================将redux数据添加进props中====================================//
 const mapStateToProps = ({ layout }: Store) => {
   const data = layout.areaData
     .filter((item: BaseDataTypes) => item.id === 3)

@@ -5,8 +5,10 @@
     @params       
     @return       
 */
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
+import nprogress from 'nprogress';
+import 'nprogress/nprogress.css';
 interface routerConfig {
   path?: string;
   children?: routerConfig[];
@@ -18,6 +20,11 @@ interface props {
   routes: routerConfig[];
 }
 export default function RouterItems(props: props) {
+  useState(nprogress.start());
+  useEffect((): any => {
+    nprogress.done();
+    return () => nprogress.start();
+  });
   const { routes }: props = props;
   const istoken = sessionStorage.token ? true : false;
   return (

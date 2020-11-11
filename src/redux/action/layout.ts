@@ -133,6 +133,7 @@ export const requestGlobalLoading = (val: boolean) => {
 */
 export const requesGlobalData = (type: boolean | undefined = false) => {
   return (dispatch: any) => {
+    console.log('ininin');
     if (sessionStorage.getItem('baseData') && !type) {
       const data = JSON.parse(sessionStorage.getItem('baseData')!);
       dispatch(addGlobalData(data));

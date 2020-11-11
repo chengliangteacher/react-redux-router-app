@@ -18,10 +18,18 @@ function LayoutView(props: props) {
     props.handleRequestGlobalData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  let handleChangeBannerWith: () => void;
   return (
     <div className="layout">
-      <Header {...props} />
-      <Banner />
+      <Header
+        handleChangeBannerWith={() => handleChangeBannerWith()}
+        {...props}
+      />
+      <Banner
+        handleChangeBannerWith={(callback: any) => {
+          handleChangeBannerWith = callback;
+        }}
+      />
       <div>
         <TagView {...props} />
         <Content {...props} />

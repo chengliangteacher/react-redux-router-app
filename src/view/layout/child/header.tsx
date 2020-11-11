@@ -10,9 +10,9 @@ import { requesGlobalData, setCollapsed } from '../../../redux/action/layout';
 import { RouteChildrenProps } from 'react-router-dom';
 import { Store } from 'antd/lib/form/interface';
 interface otherTypes {
-  handleChangeCollapsed: () => void;
-  handleRequesGlobalData: () => void;
   collapsed: boolean;
+  dispatch?: any;
+  handleChangeBannerWith: () => void;
 }
 type props = RouteChildrenProps & otherTypes;
 function Header(props: props) {
@@ -21,12 +21,7 @@ function Header(props: props) {
     sessionStorage.clear();
     props.history.push('/login');
   };
-  const {
-    handleChangeCollapsed,
-    collapsed,
-    handleRequesGlobalData,
-    history,
-  } = props;
+  const { collapsed, history } = props;
   const menu = (
     <Menu>
       <Menu.Item>
@@ -59,6 +54,17 @@ function Header(props: props) {
       </Menu.Item>
     </Menu>
   );
+  let handleChangeCollapsed = () => {
+    const clientWidth = document.body.clientWidth;
+    if (clientWidth <= 820) {
+      props.handleChangeBannerWith();
+    } else {
+      props.dispatch(setCollapsed());
+    }
+  };
+  let handleRequesGlobalData = () => {
+    props.dispatch(requesGlobalData(true));
+  };
   return (
     <div className="header">
       <div className="header-left">
@@ -107,14 +113,4 @@ const mapStateToProps = ({ layout }: Store) => {
     collapsed: layout.collapsed,
   };
 };
-const MapDispatchToPropsFunction = (dispatch: any) => {
-  return {
-    handleChangeCollapsed: () => {
-      dispatch(setCollapsed());
-    },
-    handleRequesGlobalData: () => {
-      dispatch(requesGlobalData(true));
-    },
-  };
-};
-export default connect(mapStateToProps, MapDispatchToPropsFunction)(Header);
+export default connect(mapStateToProps)(Header);

@@ -28,7 +28,6 @@ class RightClickContextMenu extends Component<props, statetype> {
         id: 0,
       }, // 当前点击tag路由信息
     };
-    this.root = React.createRef();
   }
 
   componentDidMount() {
@@ -102,7 +101,7 @@ class RightClickContextMenu extends Component<props, statetype> {
 
     return (
       visible && (
-        <div ref={this.root} className="contextMenu-wrap">
+        <div ref={(ref) => (this.root = ref)} className="contextMenu-wrap">
           <div
             className="contextMenu-option"
             onClick={() => this.props.handleCloseTag(this.state.currentRouter)}

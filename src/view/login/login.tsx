@@ -44,7 +44,7 @@ export default function Login(props: props) {
         //=====================================储存用户信息与菜单====================================//
         sessionStorage.token = res.data.userInfo.token;
         sessionStorage.resources = JSON.stringify(res.data.resources.children);
-        props.history.push('/v/a');
+        props.history.push('/v/test-form');
       })
       .finally((): void => {
         setLoading(false);

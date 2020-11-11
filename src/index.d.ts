@@ -31,6 +31,7 @@ export interface routerConfigItemTypes {
   children?: routerConfigItemTypes[];
   component?: any;
   redirect?: boolean;
+  isBack?: boolean;
 }
 
 //=====================================菜单数据类型====================================//
