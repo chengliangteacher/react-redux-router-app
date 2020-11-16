@@ -34,6 +34,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     float: left;
+
     @media screen and (max-width: 820px) {
       height: 100vh;
       position: fixed;
@@ -42,6 +43,7 @@
       transition: 0.5s;
       z-index: 10;
     }
+
     @media screen and (min-width: 820px) {
       box-shadow: none !important;
     }

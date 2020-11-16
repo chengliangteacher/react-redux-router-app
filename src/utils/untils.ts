@@ -8,9 +8,12 @@ import { routerConfigItemTypes } from '../index.d';
     @params       path 路由路径
     @return       
 */
-export function findRouterInfo(path: string): routerConfigItemTypes {
+export function findRouterInfo(
+  path: string,
+  list = model
+): routerConfigItemTypes {
   let data = {};
-  model.forEach((item: routerConfigItemTypes) => {
+  list.forEach((item: routerConfigItemTypes) => {
     if (item.path === path) {
       data = item;
     }

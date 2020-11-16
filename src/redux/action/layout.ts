@@ -5,9 +5,11 @@
     @params       
     @return       
 */
+import model from '../../router/model';
+
 import { Store } from 'antd/lib/form/interface';
 import axios from '../../api';
-import { routerItemTypes } from '../../index.d';
+import { MenuItemTypes, routerItemTypes } from '../../index.d';
 //=====================================设置菜单折叠====================================//
 export const setCollapsed = () => {
   return {
@@ -133,7 +135,6 @@ export const requestGlobalLoading = (val: boolean) => {
 */
 export const requesGlobalData = (type: boolean | undefined = false) => {
   return (dispatch: any) => {
-    console.log('ininin');
     if (sessionStorage.getItem('baseData') && !type) {
       const data = JSON.parse(sessionStorage.getItem('baseData')!);
       dispatch(addGlobalData(data));
@@ -160,5 +161,78 @@ export const requesGlobalData = (type: boolean | undefined = false) => {
         }
       );
     }
+  };
+};
+
+/* 
+    @description  设置菜单加载状态
+    @autor        cheng liang
+    @create       2020-11-16 16:33"
+    @params       
+    @return       
+*/
+export const setMenuLoading = (val: boolean) => {
+  return {
+    type: 'SET_MENU_LOADING',
+    loading: val,
+  };
+};
+
+/* 
+    @description  设置菜单数据
+    @autor        cheng liang
+    @create       2020-11-16 16:33"
+    @params       
+    @return       
+*/
+export const setMenuData = (val: MenuItemTypes[]) => {
+  return {
+    type: 'SET_MENU_DATA',
+    data: val,
+  };
+};
+
+/* 
+    @description  获取菜单数据
+    @autor        cheng liang
+    @create       2020-11-16 16:37"
+    @params       
+    @return       
+*/
+
+export const requestMenuData = () => {
+  const modelData = {
+    text: '测试页面',
+    hasChildren: true,
+    hasParent: false,
+    id: 10000,
+    type: 'group',
+    url: '',
+    icon: '',
+    children: model.map((item, index) => {
+      return {
+        text: item.title,
+        hasChildren: false,
+        hasParent: false,
+        parentId: 10000,
+        id: 10000 + (index + 1),
+        type: 'link',
+        url: item.path,
+        icon: '',
+        children: [],
+        path: item.path,
+      };
+    }),
+  };
+  return (dispatch: any) => {
+    dispatch(setMenuLoading(true));
+    axios
+      .get('/menu')
+      .then((res) => {
+        dispatch(setMenuData(res.data.concat([modelData])));
+      })
+      .finally(() => {
+        dispatch(setMenuLoading(false));
+      });
   };
 };

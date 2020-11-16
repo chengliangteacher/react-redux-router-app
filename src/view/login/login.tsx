@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, Input, Button } from 'antd';
-import md5 from 'md5';
 import './login.scss';
 import axios from '../../api';
 const layout = {
@@ -14,120 +13,147 @@ const layout = {
 interface props {
   history: any;
 }
-export default function Login(props: props) {
-  const [imageCode, setImageCode] = useState(new Date().getTime());
-  const [loading, setLoading] = useState(false);
-  let formInfo: any = {
+interface stateTypes {
+  loading: boolean;
+  imgcode: string;
+}
+export default class Login extends React.Component<props, stateTypes> {
+  public formInfo: any = {
     username: 'cl',
     password: '',
     code: '',
   };
+  constructor(props: props) {
+    super(props);
+    this.state = {
+      loading: false,
+      imgcode: '',
+    };
+  }
   //=====================================文本框取值====================================//
-  let handleChange = (e: any, key: any): void => {
-    formInfo[key] = e.target.value;
+  public handleChange = (e: any, key: any): void => {
+    this.formInfo[key] = e.target.value;
   };
   //=====================================登录====================================//
-  let handleLogin = (): void => {
-    setLoading(true);
-    formInfo.password = md5(formInfo.password);
+  public handleLogin = (): void => {
+    this.setState({
+      loading: true,
+    });
+    // this.formInfo.password = md5(this.formInfo.password);
     axios({
       method: 'post',
-      url: `/login?username=${
-        formInfo.username
-      }&password=${'96E79218965EB72C92A549DD5A330112'}&code=${formInfo.code}`,
-      headers: {
-        codeKey: imageCode,
-        source: 'pc',
+      url: '/login',
+      data: {
+        ...this.formInfo,
       },
     })
-      .then((res): void => {
+      .then((res: any): void => {
         //=====================================储存用户信息与菜单====================================//
-        sessionStorage.token = res.data.userInfo.token;
-        sessionStorage.resources = JSON.stringify(res.data.resources.children);
-        props.history.push('/v/test-form');
+        sessionStorage.token = res.token;
+        this.props.history.push('/v/test-form');
       })
       .finally((): void => {
-        setLoading(false);
+        this.setState({
+          loading: false,
+        });
       });
   };
-  return (
-    <div className="login vh-100 w-100 d-flex center">
-      <Form
-        initialValues={formInfo}
-        className="login-form px-1 py-2"
-        name="LoginForm"
-        {...layout}
-        labelAlign="right"
-      >
-        <h3 className="text-center mb-1">登录</h3>
-        <Form.Item
-          label="用户名"
-          name="username"
-          rules={[{ required: true, message: '请输入用户名' }]}
+  componentDidMount() {
+    this.getcode();
+  }
+
+  //=====================================获取验证码====================================//
+  public getcode = () => {
+    axios.get('/getcode').then((res) => {
+      if (res.data) {
+        this.setState({
+          imgcode:
+            'data:image/svg+xml;base64,' +
+            window.btoa(unescape(encodeURIComponent(res.data))),
+        });
+      }
+    });
+  };
+  render() {
+    return (
+      <div className="login vh-100 w-100 d-flex center">
+        <Form
+          initialValues={this.formInfo}
+          className="login-form px-1 py-2"
+          name="LoginForm"
+          {...layout}
+          labelAlign="right"
         >
-          <Input
-            disabled={loading}
-            onChange={(e) => {
-              handleChange(e, 'username');
-            }}
-            onPressEnter={handleLogin}
-            allowClear
-            placeholder="请输入用户名"
-          />
-        </Form.Item>
-        <Form.Item
-          label="密码"
-          name="password"
-          rules={[{ required: true, message: '请输入密码' }]}
-        >
-          <Input.Password
-            disabled={loading}
-            onChange={(e) => {
-              handleChange(e, 'password');
-            }}
-            onPressEnter={handleLogin}
-            allowClear
-            placeholder="请输入密码"
-          />
-        </Form.Item>
-        <Form.Item
-          label="验证码"
-          rules={[{ required: true, message: '请输入验证码' }]}
-        >
+          <h3 className="text-center mb-1">登录</h3>
           <Form.Item
-            className="w-60 d-inline-block"
-            name="code"
-            rules={[{ required: true, message: '请输入验证码' }]}
+            label="用户名"
+            name="username"
+            rules={[{ required: true, message: '请输入用户名' }]}
           >
             <Input
-              className="w-100"
-              disabled={loading}
+              disabled={this.state.loading}
               onChange={(e) => {
-                handleChange(e, 'code');
+                this.handleChange(e, 'username');
               }}
-              onPressEnter={handleLogin}
+              onPressEnter={this.handleLogin}
               allowClear
-              placeholder="请输入验证码"
+              placeholder="请输入用户名"
             />
           </Form.Item>
-          <img
-            className="w-40"
-            src={`/inspection/gifCode?d=${imageCode}`}
-            onClick={() => {
-              setImageCode(new Date().getTime());
-            }}
-            alt="logo"
-          />
-        </Form.Item>
-        <Button
-          className="w-100"
-          loading={loading}
-          type="primary"
-          onClick={handleLogin}
-        >
-          登录
-        </Button>
-      </Form>
-    </div>
-  );
+          <Form.Item
+            label="密码"
+            name="password"
+            rules={[{ required: true, message: '请输入密码' }]}
+          >
+            <Input.Password
+              disabled={this.state.loading}
+              onChange={(e) => {
+                this.handleChange(e, 'password');
+              }}
+              onPressEnter={this.handleLogin}
+              allowClear
+              placeholder="请输入密码"
+            />
+          </Form.Item>
+          <Form.Item
+            label="验证码"
+            rules={[{ required: true, message: '请输入验证码' }]}
+          >
+            <Form.Item
+              className="w-60 d-inline-block"
+              name="code"
+              rules={[{ required: true, message: '请输入验证码' }]}
+            >
+              <Input
+                className="w-100"
+                disabled={this.state.loading}
+                onChange={(e) => {
+                  this.handleChange(e, 'code');
+                }}
+                onPressEnter={this.handleLogin}
+                allowClear
+                placeholder="请输入验证码"
+              />
+            </Form.Item>
+            <img
+              className="w-40"
+              src={this.state.imgcode}
+              onClick={() => {
+                this.getcode();
+              }}
+              alt="logo"
+            />
+          </Form.Item>
+          <Button
+            className="w-100"
+            loading={this.state.loading}
+            type="primary"
+            onClick={this.handleLogin}
+          >
+            登录
+          </Button>
+        </Form>
+      </div>
+    );
+  }
 }

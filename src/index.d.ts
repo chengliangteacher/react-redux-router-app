@@ -36,11 +36,14 @@ export interface routerConfigItemTypes {
 
 //=====================================菜单数据类型====================================//
 export interface MenuItemTypes {
+  map(arg0: (item: MenuItemTypes) => JSX.Element): import('react').ReactNode;
   id: number;
   text: string;
   hasChildren?: boolean;
   type: string;
   children: Array<MenuItemTypes>;
+  url: string;
+  parentId?: number;
 }
 
 //=====================================基础数据类型====================================//
@@ -60,4 +63,6 @@ export interface layoutReduxStateTypes {
   areaData: BaseDataTypes[];
   foodTypesData: BaseDataTypes[];
   planTypesData: BaseDataTypes[];
+  menuLoading: boolean;
+  menuData: MenuItemTypes[];
 }

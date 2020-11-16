@@ -5,17 +5,19 @@ import Content from './child/content';
 import TagView from './child/tag-view';
 import { connect } from 'react-redux';
 import './layout.scss';
-import { requesGlobalData } from '../../redux/action/layout';
+import { requesGlobalData, requestMenuData } from '../../redux/action/layout';
 import { routerConfigItemTypes } from '../../index.d';
 import { RouteChildrenProps } from 'react-router-dom';
 interface othersTypes {
   routes: routerConfigItemTypes[];
   handleRequestGlobalData: () => void;
+  handleRequestMenuData: () => void;
 }
 type props = othersTypes & RouteChildrenProps;
 function LayoutView(props: props) {
   useEffect(() => {
     props.handleRequestGlobalData();
+    props.handleRequestMenuData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   let handleChangeBannerWith: () => void;
@@ -29,6 +31,7 @@ function LayoutView(props: props) {
         handleChangeBannerWith={(callback: any) => {
           handleChangeBannerWith = callback;
         }}
+        {...props}
       />
       <div>
         <TagView {...props} />
@@ -42,6 +45,9 @@ const MapDispatchToPropsFunction = (dispatch: any) => {
   return {
     handleRequestGlobalData: () => {
       dispatch(requesGlobalData());
+    },
+    handleRequestMenuData: () => {
+      dispatch(requestMenuData());
     },
   };
 };

@@ -12,6 +12,8 @@ const initState = {
   areaData: [],
   foodTypesData: [],
   planTypesData: [],
+  menuLoading: false,
+  menuData: [],
 };
 
 export default function layout(state = initState, action: any) {
@@ -45,6 +47,12 @@ export default function layout(state = initState, action: any) {
     }
     case 'REQUEST_GLOBAL_LOADING': {
       return Object.assign({}, state, { globalLoading: action.loading });
+    }
+    case 'SET_MENU_LOADING': {
+      return Object.assign({}, state, { menuLoading: action.loading });
+    }
+    case 'SET_MENU_DATA': {
+      return Object.assign({}, state, { menuData: action.data });
     }
     case 'ADD_GLOBAL_DATA': {
       return Object.assign({}, state, {
