@@ -1,0 +1,162 @@
+[{
+    "id": 1,
+    "name": "2019执法抽检校验规则",
+    "createUser": 27,
+    "createTime": "2018-11-29 23:52:07",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 2,
+    "name": "日常监督校验规则",
+    "createUser": 27,
+    "createTime": "2018-12-12 11:20:09",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 6,
+    "name": "专项任务校验",
+    "createUser": 27,
+    "createTime": "2018-12-19 14:29:52",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 9,
+    "name": "评价性抽检",
+    "createUser": 192,
+    "createTime": "2018-12-28 15:36:44",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 10,
+    "name": "2019年监督任务限制条件（流通/餐饮）",
+    "createUser": 130,
+    "createTime": "2019-01-16 12:01:39",
+    "updateTime": "2019-04-01 17:39:35",
+    "regulations": null
+}, {
+    "id": 15,
+    "name": "华测食品安全风险监测校验规则",
+    "createUser": 256,
+    "createTime": "2019-03-05 09:05:26",
+    "updateTime": "2019-03-06 10:08:59",
+    "regulations": null
+}, {
+    "id": 19,
+    "name": "2019年深圳市智能榨汁机现榨橙汁专项食品监测抽样检验校验规则",
+    "createUser": 277,
+    "createTime": "2019-03-18 10:09:05",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 20,
+    "name": "无规则",
+    "createUser": 1,
+    "createTime": "2019-03-19 00:33:12",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 21,
+    "name": "2019年抽检频次要求（流通餐饮）-检测院",
+    "createUser": 130,
+    "createTime": "2019-05-06 16:20:53",
+    "updateTime": "2019-05-07 08:57:41",
+    "regulations": null
+}, {
+    "id": 22,
+    "name": "2019年按名单抽检任务抽检频次-检测院",
+    "createUser": 130,
+    "createTime": "2019-05-07 09:06:12",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 23,
+    "name": "2019年生产流通餐饮专项抽检任务抽检频次-检测院",
+    "createUser": 130,
+    "createTime": "2019-05-16 11:41:59",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 24,
+    "name": "test",
+    "createUser": 1,
+    "createTime": "2020-03-17 16:30:27",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 25,
+    "name": "2020普通专项",
+    "createUser": 275,
+    "createTime": "2020-03-19 15:04:05",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 27,
+    "name": "2020年抽检频次要求（202001LT02）-检测院",
+    "createUser": 275,
+    "createTime": "2020-04-01 15:50:57",
+    "updateTime": "2020-04-01 15:57:30",
+    "regulations": null
+}, {
+    "id": 29,
+    "name": "2020年评价性监测抽检项目测试规则",
+    "createUser": 189,
+    "createTime": "2020-04-28 14:09:26",
+    "updateTime": "2020-04-30 09:48:07",
+    "regulations": null
+}, {
+    "id": 31,
+    "name": "2020年评价性监测抽检项目正式规则",
+    "createUser": 189,
+    "createTime": "2020-04-30 22:42:05",
+    "updateTime": "2020-04-30 22:44:18",
+    "regulations": null
+}, {
+    "id": 32,
+    "name": "餐饮经营食品及相关产品抽检校验规则",
+    "createUser": 126,
+    "createTime": "2020-05-14 16:54:56",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 33,
+    "name": "2020年应急专项抽检校验规则",
+    "createUser": 126,
+    "createTime": "2020-05-21 21:02:34",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 34,
+    "name": "2020年评价性监测抽检基本原则校验规则--待完善（检测院）勿动",
+    "createUser": 126,
+    "createTime": "2020-05-21 21:06:47",
+    "updateTime": "2020-05-21 21:20:44",
+    "regulations": null
+}, {
+    "id": 35,
+    "name": "2020年深圳市食品安全风险监测抽检校验规则",
+    "createUser": 258,
+    "createTime": "2020-06-05 09:51:47",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 36,
+    "name": "2020年凉茶专项校验规则",
+    "createUser": 130,
+    "createTime": "2020-07-02 15:44:31",
+    "updateTime": null,
+    "regulations": null
+}, {
+    "id": 38,
+    "name": "流通湿米粉专项",
+    "createUser": 275,
+    "createTime": "2020-07-31 11:43:23",
+    "updateTime": "2020-07-31 11:44:53",
+    "regulations": null
+}, {
+    "id": 39,
+    "name": "风险监测奶茶",
+    "createUser": 275,
+    "createTime": "2020-11-03 14:19:54",
+    "updateTime": null,
+    "regulations": null
+}]
