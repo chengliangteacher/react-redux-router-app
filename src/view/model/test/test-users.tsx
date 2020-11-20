@@ -25,7 +25,7 @@ export default function TestTable(props: RouteChildrenProps) {
   let getTableData = (pageNum: number = 1, pageSize: number = 20): void => {
     setLoading(true);
     axios
-      .get('/users', { params: { pageNum, pageSize } })
+      .get('/user', { params: { pageNum, pageSize } })
       .then((res: any) => {
         pagination.total = res.total;
         pagination.current = pageNum;
@@ -79,7 +79,6 @@ export default function TestTable(props: RouteChildrenProps) {
       <Table
         loading={loading}
         dataSource={tableData}
-        bordered
         rowKey="id"
         pagination={pagination}
       >
@@ -94,29 +93,15 @@ export default function TestTable(props: RouteChildrenProps) {
         <Column
           ellipsis={{ showTitle: true }}
           title="用户名称"
-          dataIndex="user_name"
-          key="user_name"
-          align="center"
-        />
-        <Column
-          ellipsis={{ showTitle: true }}
-          title="电话"
-          dataIndex="tele_phone"
-          key="tele_phone"
-          align="center"
-        />
-        <Column
-          ellipsis={{ showTitle: true }}
-          title="机构名称"
-          dataIndex="orgName"
-          key="orgName"
+          dataIndex="name"
+          key="name"
           align="center"
         />
         <Column
           ellipsis={{ showTitle: true }}
           title="登录名称"
-          dataIndex="login_name"
-          key="login_name"
+          dataIndex="username"
+          key="username"
           align="center"
         />
         <Column
@@ -132,6 +117,13 @@ export default function TestTable(props: RouteChildrenProps) {
         <Column
           ellipsis={{ showTitle: true }}
           title="创建时间"
+          dataIndex="create_time"
+          key="create_time"
+          align="center"
+        />
+        <Column
+          ellipsis={{ showTitle: true }}
+          title="更新时间"
           dataIndex="create_time"
           key="create_time"
           align="center"

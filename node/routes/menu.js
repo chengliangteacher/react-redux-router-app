@@ -1,12 +1,19 @@
 var express = require('express');
 var router = express.Router();
 
-const { getMenusService } = require("../service/menu")
+const { getMenusService, getMenusAllService, addMenuService } = require("../service/menu")
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
-    console.log(req.user.admin)
-    const result = await getMenusService()
+    const result = await getMenusService(req.session.user_id)
+    res.send(result);
+});
+router.get('/all', async function (req, res, next) {
+    const result = await getMenusAllService()
+    res.send(result);
+});
+router.post('/', async function (req, res, next) {
+    const result = await addMenuService(req.body)
     res.send(result);
 });
 

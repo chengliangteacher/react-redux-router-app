@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Header from './child/header';
 import Banner from './child/banner';
 import Content from './child/content';
@@ -14,31 +14,32 @@ interface othersTypes {
   handleRequestMenuData: () => void;
 }
 type props = othersTypes & RouteChildrenProps;
-function LayoutView(props: props) {
-  useEffect(() => {
-    props.handleRequestGlobalData();
-    props.handleRequestMenuData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  let handleChangeBannerWith: () => void;
-  return (
-    <div className="layout">
-      <Header
-        handleChangeBannerWith={() => handleChangeBannerWith()}
-        {...props}
-      />
-      <Banner
-        handleChangeBannerWith={(callback: any) => {
-          handleChangeBannerWith = callback;
-        }}
-        {...props}
-      />
-      <div>
-        <TagView {...props} />
-        <Content {...props} />
+class LayoutView extends React.Component<props> {
+  componentDidMount() {
+    this.props.handleRequestGlobalData();
+    this.props.handleRequestMenuData();
+  }
+  public handleChangeBannerWith = () => {};
+  render() {
+    return (
+      <div className="layout">
+        <Header
+          handleChangeBannerWith={() => this.handleChangeBannerWith()}
+          {...this.props}
+        />
+        <Banner
+          handleChangeBannerWith={(callback: any) => {
+            this.handleChangeBannerWith = callback;
+          }}
+          {...this.props}
+        />
+        <div>
+          <TagView {...this.props} />
+          <Content {...this.props} />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 const MapDispatchToPropsFunction = (dispatch: any) => {

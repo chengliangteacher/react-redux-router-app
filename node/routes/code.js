@@ -13,7 +13,6 @@ router.get('/', async function (req, res, next) {
     }
     var captcha = svgCaptcha.create(codeConfig);
     req.session.captcha = captcha.text.toLowerCase();
-    const text = "data:image/svg+xml," + captcha.data
     res.send({
         data: captcha.data,
         msg: "",

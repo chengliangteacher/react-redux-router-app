@@ -17,6 +17,7 @@ var companysRouter = require('./routes/companys');
 var regulationPlansRouter = require('./routes/regulationPlans');
 var menusRouter = require('./routes/menu');
 var codeRouter = require('./routes/code');
+var rolesRouter = require('./routes/roles');
 
 var app = express();
 
@@ -53,7 +54,7 @@ app.use(function (err, req, res, next) {
     @params       
     @return       
 */
-app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: {maxAge: 60000}}));
+app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: {maxAge: 360000}}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -71,6 +72,7 @@ app.use('/api/plan', companysRouter);
 app.use('/api/regulationPlans', regulationPlansRouter);
 app.use('/api/menu', menusRouter);
 app.use('/api/getcode', codeRouter);
+app.use('/api/role', rolesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

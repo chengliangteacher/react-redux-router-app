@@ -1,5 +1,5 @@
-import React from 'react';
-import { Menu } from 'antd';
+import React, { Fragment } from 'react';
+import { Menu, Spin } from 'antd';
 import { MailOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { MenuItemTypes } from '../../../index.d';
@@ -83,27 +83,34 @@ class Banner extends React.Component<props, stateTypes> {
   render() {
     const { collapsed, menuData } = this.props;
     return (
-      <Menu
-        id="banner"
-        style={{ width: collapsed ? 80 : 220 }}
-        defaultSelectedKeys={this.state.defaultSelectedKeys}
-        defaultOpenKeys={this.state.defaultOpenKeys}
-        mode="inline"
-        className="banner"
-        inlineCollapsed={this.props.collapsed}
-      >
-        {menuData.map((item: MenuItemTypes) => {
-          if (item.type === 'group' && item.hasChildren) {
-            return this.handleRenderSubMenu(item);
-          } else {
-            return (
-              <Menu.Item icon={<MailOutlined />} key={item.id + ''}>
-                {item.url ? <Link to={item.url}>{item.text}</Link> : item.text}
-              </Menu.Item>
-            );
-          }
-        })}
-      </Menu>
+      <Fragment>
+        <Menu
+          id="banner"
+          style={{ width: collapsed ? 80 : 220 }}
+          defaultSelectedKeys={this.state.defaultSelectedKeys}
+          defaultOpenKeys={this.state.defaultOpenKeys}
+          mode="inline"
+          className="banner"
+          inlineCollapsed={this.props.collapsed}
+        >
+          {menuData.map((item: MenuItemTypes) => {
+            if (item.type === 'group' && item.hasChildren) {
+              return this.handleRenderSubMenu(item);
+            } else {
+              return (
+                <Menu.Item icon={<MailOutlined />} key={item.id + ''}>
+                  {item.url ? (
+                    <Link to={item.url}>{item.text}</Link>
+                  ) : (
+                    item.text
+                  )}
+                </Menu.Item>
+              );
+            }
+          })}
+        </Menu>
+        <Spin spinning={this.props.menuLoading} delay={500}></Spin>
+      </Fragment>
     );
   }
 }

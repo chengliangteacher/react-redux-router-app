@@ -14,7 +14,6 @@ router.post('/', async function (req, res, next) {
         })
         return
     }
-    console.log(req.session.captcha)
     if (req.body.code !== req.session.captcha) {
         res.send({
             code: 500,
@@ -38,6 +37,7 @@ router.post('/', async function (req, res, next) {
         )
 
     }
+    req.session.user_id = result.data[0].id;
     res.send({ ...result, token });
 });
 
