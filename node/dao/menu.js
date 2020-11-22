@@ -56,10 +56,18 @@ function getMenus(user_id) {
 }
 function getMenuAll() {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT * FROM menu"
+        const sql = `SELECT * FROM menu`
         connection.query(sql, (err, rows) => {
             if (!err) {
-                resolve({ err, code: 200, data: [...rows] })
+                let data = [...rows];
+                let groupData = [];
+                let linkData = [];
+                if (rows.length) {
+                    groupData = data.filter(item => !item.parentId);
+                    linkData = data.filter(item => item.parentId);
+                    deepMenus(groupData, linkData)
+                }
+                resolve({ err, code: 200, data: [...groupData] })
             } else {
                 resolve({ err, code: 500, data: null, msg: err.sqlMessage ? err.sqlMessage : "服务器错误" })
             }

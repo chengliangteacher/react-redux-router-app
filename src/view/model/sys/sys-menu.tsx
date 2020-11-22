@@ -113,7 +113,7 @@ export default class TestTable extends React.Component<
     const data = { ...this.formInfo };
     data.parentId = this.state.currentRows?.id;
     axios
-      .post('/menu', data)
+      .post('/menu/all', data)
       .then((res) => {
         this.setState({
           addVisible: false,

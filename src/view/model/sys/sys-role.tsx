@@ -1,15 +1,16 @@
 import React, { Fragment } from 'react';
-import { Table, Button, Drawer, Form, Input, Tree } from 'antd';
+import { Table, Button, Drawer, Form, Input, Tree, Space } from 'antd';
 import axios from '../../../api';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { RouteChildrenProps } from 'react-router-dom';
 const { Column } = Table;
 interface dataItem {
-  id: number;
+  id?: number;
   title: string;
   note: string;
-  create_time: string;
-  update_time: string;
+  create_time?: string;
+  update_time?: string;
+  menuIds: number[];
 }
 interface stateTypes {
   loading: boolean;
@@ -19,6 +20,7 @@ interface stateTypes {
   currentRows: dataItem | null;
   btnLoading: boolean;
   menuData: any;
+  formInfo: any;
 }
 const layout = {
   labelCol: { span: 6 },
@@ -32,11 +34,6 @@ export default class TestTable extends React.Component<
   RouteChildrenProps,
   stateTypes
 > {
-  public formInfo: any = {
-    title: '',
-    note: '',
-    menuIds: [],
-  };
   constructor(props: RouteChildrenProps) {
     super(props);
     this.state = {
@@ -62,8 +59,15 @@ export default class TestTable extends React.Component<
       currentRows: null,
       btnLoading: false,
       menuData: [],
+      formInfo: {
+        title: '',
+        note: '',
+        menuIds: [],
+      },
     };
+    this.handleChangeForm.bind(this);
   }
+  //=====================================列表数据====================================//
   public getTableData = (pageNum: number = 1, pageSize: number = 20): void => {
     this.setState({
       loading: true,
@@ -76,7 +80,9 @@ export default class TestTable extends React.Component<
           state.pagination.current = pageNum;
           state.pagination.pageSize = pageSize;
           return {
-            tableData: res.data,
+            tableData: res.data.map((item: any, index: any) =>
+              Object.assign(item, { index: index + 1 })
+            ),
             pagination: state.pagination,
           };
         });
@@ -89,23 +95,29 @@ export default class TestTable extends React.Component<
   };
   //=====================================提交表单====================================//
   public onFinish = (values: any) => {
-    this.setState({
-      btnLoading: true,
-    });
-    const data = { ...this.formInfo };
-    axios
-      .post('/role', data)
-      .then((res) => {
-        this.setState({
-          addVisible: false,
-        });
-        this.getTableData();
-      })
-      .finally(() => {
-        this.setState({
-          btnLoading: false,
-        });
+    this.handleDellFinallymenu(this.state.formInfo.menuIds).then(() => {
+      this.setState({
+        btnLoading: true,
       });
+      let url = '/role';
+      if (this.state.formInfo.id) {
+        url = `/role/${this.state.formInfo.id}`;
+      }
+      const data = { ...this.state.formInfo };
+      axios
+        .post(url, data)
+        .then((res) => {
+          this.setState({
+            addVisible: false,
+          });
+          this.getTableData();
+        })
+        .finally(() => {
+          this.setState({
+            btnLoading: false,
+          });
+        });
+    });
   };
   //=====================================提交表单失败====================================//
   public onFinishFailed = (errorInfo: any) => {
@@ -119,15 +131,21 @@ export default class TestTable extends React.Component<
   };
   //=====================================form表单数据====================================//
   public handleChangeForm = (key: string, e: any) => {
-    if (e.target) {
-      this.formInfo[key] = e.target.value;
-    } else {
-      this.formInfo[key] = e;
-    }
+    e.persist();
+    this.setState((state) => {
+      if (e.target) {
+        state.formInfo[key] = e.target.value;
+      } else {
+        state.formInfo[key] = e;
+      }
+      return {
+        formInfo: state.formInfo,
+      };
+    });
   };
   //=====================================获取menu====================================//
   public getMenuData = () => {
-    axios.get('/menu').then((res) => {
+    axios.get('/menu/all').then((res) => {
       const data = res.data;
       this.addKeyToMenuData(data);
       this.setState({
@@ -144,11 +162,83 @@ export default class TestTable extends React.Component<
       }
     });
   };
+  public selectKeys: any = {};
   //=====================================点击菜单树触发====================================//
-  public handleTreeOnCheck = (checkedKeys: any, halfCheckedKeys: any) => {
-    console.log('checkedKeys', checkedKeys);
-    console.log('halfCheckedKeys', halfCheckedKeys);
-    this.formInfo.menuIds = checkedKeys;
+  public handleTreeOnCheck = (checkedKeys: any) => {
+    this.setState((state) => {
+      state.formInfo.menuIds = checkedKeys;
+      return {
+        formInfo: state.formInfo,
+      };
+    });
+  };
+  //=====================================处理选中菜单数据====================================//
+  public deelTreeKeys = (id: any, data: any) => {
+    this.selectKeys[id] = id;
+    data.forEach((item: any) => {
+      if (item.id === id) {
+        if (item.hasParent && item.parentId) {
+          this.selectKeys[item.parentId] = item.parentId;
+          this.deelTreeKeys(item.parentId, this.state.menuData);
+        }
+      } else {
+        if (item.hasChildren && item.children.length) {
+          this.deelTreeKeys(id, item.children);
+        }
+      }
+    });
+  };
+  //=====================================编辑====================================//
+  public handleEditRole = (val: dataItem) => {
+    this.setState(
+      {
+        addVisible: true,
+        formInfo: JSON.parse(JSON.stringify(val)),
+      },
+      () => {
+        this.handleDellDdfaultChecks(this.state.menuData);
+      }
+    );
+  };
+  //=====================================处理menu值====================================//
+  public handleDellFinallymenu = (data: number[]) => {
+    return new Promise((resolve, reject) => {
+      this.setState((state) => {
+        this.selectKeys = {};
+        state.formInfo.menuIds = [];
+        data.forEach((item: number) => {
+          this.deelTreeKeys(item, this.state.menuData);
+        });
+        for (let key in this.selectKeys) {
+          state.formInfo.menuIds.push(Number(key));
+        }
+        resolve();
+        return {
+          formInfo: state.formInfo,
+        };
+      });
+    });
+  };
+  //=====================================处理tree节点默认值====================================//
+  public handleDellDdfaultChecks = (data: any) => {
+    let menuIds = this.state.formInfo.menuIds;
+    data.forEach((item: any) => {
+      if (menuIds.some((item2: number) => item2 === item.id)) {
+        if (item.hasChildren) {
+          menuIds = menuIds.filter((item3: number) => item3 !== item.id);
+        }
+      } else {
+        if (item.hasChildren && item.children.length) {
+          this.handleDellDdfaultChecks(item.children);
+        }
+      }
+    });
+    this.setState((state) => {
+      state.formInfo.menuIds = menuIds;
+      return {
+        formInfo: state.formInfo,
+      };
+    });
   };
   componentDidMount() {
     this.getTableData();
@@ -214,77 +304,97 @@ export default class TestTable extends React.Component<
             key="action"
             render={(text, record: dataItem, index) => {
               return (
-                <Button danger size="small">
-                  删除
-                </Button>
+                <Space>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      this.handleEditRole(record);
+                    }}
+                    size="small"
+                  >
+                    编辑
+                  </Button>
+                  <Button danger size="small">
+                    删除
+                  </Button>
+                </Space>
               );
             }}
             align="center"
           />
         </Table>
         <Drawer
-          title="新增角色"
+          title={this.state.formInfo.id ? '编辑角色' : '新增角色'}
           placement="right"
           width={500}
           visible={this.state.addVisible}
           onClose={() => {
-            this.setState({ addVisible: false, currentRows: null });
+            this.setState({
+              addVisible: false,
+              currentRows: null,
+              formInfo: { id: null, title: '', note: '', menuIds: [] },
+            });
           }}
         >
-          <Form
-            {...layout}
-            name="addrole"
-            initialValues={{}}
-            onFinish={this.onFinish}
-            onFinishFailed={this.onFinishFailed}
-          >
-            <Form.Item
-              label="角色名称"
-              name="title"
-              rules={[{ required: true, message: '请输入角色名称' }]}
+          {this.state.addVisible ? (
+            <Form
+              {...layout}
+              initialValues={this.state.formInfo}
+              name="addrole"
+              onFinish={this.onFinish}
+              onFinishFailed={this.onFinishFailed}
             >
-              <Input
-                allowClear
-                disabled={this.state.btnLoading}
-                onChange={(e) => {
-                  this.handleChangeForm('title', e);
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              label="角色备注"
-              name="note"
-              rules={[{ required: true, message: '请输入角色备注' }]}
-            >
-              <Input
-                allowClear
-                disabled={this.state.btnLoading}
-                onChange={(e) => {
-                  this.handleChangeForm('note', e);
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              label="菜单"
-              name="menuIds"
-              // rules={[{ required: true, message: '请选择菜单' }]}
-            >
-              <Tree
-                checkable
-                treeData={this.state.menuData}
-                onCheck={this.handleTreeOnCheck}
-              />
-            </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={this.state.btnLoading}
+              <Form.Item
+                label="角色名称"
+                name="title"
+                rules={[{ required: true, message: '请输入角色名称' }]}
               >
-                保存
-              </Button>
-            </Form.Item>
-          </Form>
+                <Input
+                  allowClear
+                  disabled={this.state.btnLoading}
+                  onChange={(e) => {
+                    this.handleChangeForm('title', e);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                label="角色备注"
+                name="note"
+                rules={[{ required: true, message: '请输入角色备注' }]}
+              >
+                <Input
+                  allowClear
+                  disabled={this.state.btnLoading}
+                  onChange={(e) => {
+                    this.handleChangeForm('note', e);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                label="菜单"
+                name="menuIds"
+                // rules={[{ required: true, message: '请选择菜单' }]}
+              >
+                <Tree
+                  checkable
+                  treeData={this.state.menuData}
+                  onCheck={this.handleTreeOnCheck}
+                  checkedKeys={this.state.formInfo.menuIds}
+                />
+              </Form.Item>
+              <Form.Item {...tailLayout}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={this.state.btnLoading}
+                >
+                  保存
+                </Button>
+              </Form.Item>
+            </Form>
+          ) : (
+            ''
+          )}
         </Drawer>
       </Fragment>
     );
