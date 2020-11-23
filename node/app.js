@@ -54,7 +54,7 @@ app.use(function (err, req, res, next) {
     @params       
     @return       
 */
-app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: {maxAge: 360000}}));
+app.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: {maxAge: 3600000}}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -78,20 +78,15 @@ function getMenuAll() {
 function addMenu(params) {
     return new Promise((resolve, reject) => {
         let err = "";
-        if (!params.text || !params.type || !params.icon || !params.url) {
+        if (!params.text || !params.type) {
             if (!params.text) {
                 err = "菜单名不能为空"
             } else if (!params.type) {
                 err = "菜单类型不能为空"
-            } else if (!params.icon) {
-                err = "菜单图标不能为空"
-            } else if (!params.url) {
-                err = "菜单路径不能为空"
-            }
+            } 
             resolve({ err, code: 500, data: null, msg: err })
         } else {
             const sql = `INSERT INTO menu(text, url, parentId, type, icon) VALUE ("${params.text}", "${params.url}", "${params.parentId}", "${params.type}", "${params.icon}")`
-            console.log(1111, sql)
             connection.query(sql, (err, rows) => {
                 if (!err) {
                     resolve({ err, code: 200, data: rows })
@@ -102,8 +97,84 @@ function addMenu(params) {
         }
     })
 }
+//=====================================编辑菜单====================================//
+function editMenu(params) {
+    return new Promise((resolve, reject) => {
+        let err = "";
+        if (!params.text || !params.type || !params.menuId) {
+            if (!params.text) {
+                err = "菜单名不能为空"
+            } else if (!params.type) {
+                err = "菜单类型不能为空"
+            } else if (!params.menuId) {
+                err = "菜单id不能为空"
+            }
+            resolve({ err, code: 500, data: null, msg: err })
+        } else {
+            const sql = `UPDATE menu SET text="${params.text}", type="${params.type}", icon="${params.icon}", url="${params.url}" WHERE id=${params.menuId}`
+            connection.query(sql, (err, rows) => {
+                if (!err) {
+                    resolve({ err, code: 200, data: rows })
+                } else {
+                    resolve({ err, code: 500, data: null, msg: err.sqlMessage ? err.sqlMessage : "服务器错误" })
+                }
+            })
+        }
+    })
+}
+
+let ids = [];
+function findMenuIds(data, id) {
+    data.forEach(item => {
+        if (item.parentId === Number(id)) {
+            ids.push(item.id)
+            if (item.hasChildren && item.children.length) {
+                findMenuIds(item.children, item.id)
+            }
+        } else {
+            if (item.hasChildren && item.children.length) {
+                findMenuIds(item.children, id)
+            }
+        }
+    })
+}
+
+//=====================================删除菜单====================================//
+function deleteMenus(params) {
+    return new Promise((resolve, reject) => {
+        const menuSql = `SELECT * FROM menu`
+        connection.query(menuSql, (err, rows) => {
+            if (!err) {
+                let data = [...rows];
+                let groupData = [];
+                let linkData = [];
+                if (rows.length) {
+                    groupData = data.filter(item => !item.parentId);
+                    linkData = data.filter(item => item.parentId);
+                    deepMenus(groupData, linkData)
+                }
+                ids = []
+                findMenuIds(groupData, params.menuId)
+                ids.push(params.menuId)
+                const delSql = `DELETE FROM menu WHERE id IN (${ids.join(",")})`
+                connection.query(delSql, (err2, rows2) => {
+                    if (!err2) {
+                        resolve({ err: err2, code: 200, data: rows2, msg: "删除成功" })
+                    } else {
+                        resolve({ err: err2, code: 500, data: null, msg: err2.sqlMessage ? err2.sqlMessage : "服务器错误" })
+                    }
+                })
+
+            } else {
+                resolve({ err, code: 500, data: null, msg: err.sqlMessage ? err.sqlMessage : "服务器错误" })
+            }
+        })
+    })
+}
 module.exports = {
     getMenusDao: getMenus,
     getMenuAllDao: getMenuAll,
-    addMenuDao: addMenu
+    addMenuDao: addMenu,
+    editMenuDao: editMenu,
+    deleteMenusDao: deleteMenus
 }

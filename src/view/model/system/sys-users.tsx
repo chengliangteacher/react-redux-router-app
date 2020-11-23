@@ -15,6 +15,7 @@ import { TablePaginationConfig } from 'antd/lib/table';
 import { RouteChildrenProps } from 'react-router-dom';
 const { Column } = Table;
 const { Option } = Select;
+//=====================================表格数据类型====================================//
 interface dataItem {
   id: number;
   name: string;
@@ -24,6 +25,7 @@ interface dataItem {
   QQ: string | undefined;
   roleIds: number[];
 }
+//=====================================state数据类型====================================//
 interface stateTypes {
   loading: boolean;
   tableData: Array<dataItem>;
@@ -56,10 +58,11 @@ export default class TestTable extends React.Component<
     QQ: '',
     password: '',
     roleIds: [],
-  };
+  }; //-----------form数据
   constructor(props: RouteChildrenProps) {
     super(props);
     this.state = {
+      //=====================================分页参数====================================//
       pagination: {
         current: 1,
         pageSize: 20,
@@ -76,17 +79,18 @@ export default class TestTable extends React.Component<
           this.getTableData(page, pageSize);
         },
       },
-      tableData: [],
-      loading: false,
-      addVisible: false,
-      btnLoading: false,
-      roleData: [],
-      editId: null,
-      deleteVisible: false,
-      delLoading: false,
-      delId: null,
+      tableData: [], //-------表格数据变量
+      loading: false, //-------全局夹杂圈圈
+      addVisible: false, //-------新增抽屉变量
+      btnLoading: false, //-------提交后台加载动画
+      roleData: [], //-------角色数据
+      editId: null, //-------编辑所需id
+      deleteVisible: false, //-------删除弹框变量
+      delLoading: false, //-------删除提交后台加载动画
+      delId: null, //-------删除所需id
     };
   }
+  //=====================================请求后台加载数据====================================//
   public getTableData = (pageNum: number = 1, pageSize: number = 20): void => {
     this.setState({
       loading: true,
@@ -113,7 +117,7 @@ export default class TestTable extends React.Component<
         });
       });
   };
-  //=====================================提交表单失败====================================//
+  //=====================================提交表单到后台--验证成功====================================//
   public onFinish = (values: any) => {
     this.setState({
       btnLoading: true,
@@ -137,6 +141,7 @@ export default class TestTable extends React.Component<
         });
       });
   };
+  //=====================================提交表单失败====================================//
   public onFinishFailed = (errorInfo: any) => {
     console.log('Failed', errorInfo);
   };
@@ -162,7 +167,7 @@ export default class TestTable extends React.Component<
     });
     this.formInfo = val;
   };
-  //=====================================角色数据====================================//
+  //=====================================获取角色数据====================================//
   public getRoleData = () => {
     axios.get('/role').then((res) => {
       this.setState({

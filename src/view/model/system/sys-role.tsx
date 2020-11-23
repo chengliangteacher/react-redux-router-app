@@ -12,6 +12,7 @@ interface dataItem {
   update_time?: string;
   menuIds: number[];
 }
+//=====================================state类型====================================//
 interface stateTypes {
   loading: boolean;
   tableData: Array<dataItem>;
@@ -24,6 +25,7 @@ interface stateTypes {
   delVisible: boolean;
   delLoading: boolean;
 }
+//====================================label 与 表单布局====================================//
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 18 },
@@ -36,7 +38,7 @@ export default class TestTable extends React.Component<
   RouteChildrenProps,
   stateTypes
 > {
-  public delId: number | null | undefined = null;
+  public delId: number | null | undefined = null; //----------删除所需id
   constructor(props: RouteChildrenProps) {
     super(props);
     this.state = {
@@ -99,7 +101,7 @@ export default class TestTable extends React.Component<
         });
       });
   };
-  //=====================================提交表单====================================//
+  //=====================================提交表单-验证成功====================================//
   public onFinish = (values: any) => {
     this.handleDellFinallymenu(this.state.formInfo.menuIds).then(() => {
       this.setState({
@@ -125,7 +127,7 @@ export default class TestTable extends React.Component<
         });
     });
   };
-  //=====================================提交表单失败====================================//
+  //=====================================提交表单---验证失败====================================//
   public onFinishFailed = (errorInfo: any) => {
     console.log('Failed', errorInfo);
   };
@@ -159,6 +161,7 @@ export default class TestTable extends React.Component<
       });
     });
   };
+  //=====================================映射树形数据递归添加key值====================================//
   public addKeyToMenuData = (data: any) => {
     data.forEach((item: any) => {
       item.key = item.id;
@@ -168,7 +171,7 @@ export default class TestTable extends React.Component<
       }
     });
   };
-  public selectKeys: any = {};
+  public selectKeys: any = {}; //----------当前所选树key
   //=====================================点击菜单树触发====================================//
   public handleTreeOnCheck = (checkedKeys: any) => {
     this.setState((state) => {
@@ -402,11 +405,7 @@ export default class TestTable extends React.Component<
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="菜单"
-                name="menuIds"
-                // rules={[{ required: true, message: '请选择菜单' }]}
-              >
+              <Form.Item label="菜单" name="menuIds">
                 <Tree
                   checkable
                   treeData={this.state.menuData}

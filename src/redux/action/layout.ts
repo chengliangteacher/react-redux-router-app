@@ -5,8 +5,6 @@
     @params       
     @return       
 */
-import model from '../../router/model';
-
 import { Store } from 'antd/lib/form/interface';
 import axios from '../../api';
 import { MenuItemTypes, routerItemTypes } from '../../index.d';
@@ -201,35 +199,12 @@ export const setMenuData = (val: MenuItemTypes[]) => {
 */
 
 export const requestMenuData = () => {
-  const modelData = {
-    text: '测试页面',
-    hasChildren: true,
-    hasParent: false,
-    id: 10000,
-    type: 'group',
-    url: '',
-    icon: '',
-    children: model.map((item, index) => {
-      return {
-        text: item.title,
-        hasChildren: false,
-        hasParent: false,
-        parentId: 10000,
-        id: 10000 + (index + 1),
-        type: 'link',
-        url: item.path,
-        icon: '',
-        children: [],
-        path: item.path,
-      };
-    }),
-  };
   return (dispatch: any) => {
     dispatch(setMenuLoading(true));
     axios
       .get('/menu')
       .then((res) => {
-        dispatch(setMenuData(res.data.concat([modelData])));
+        dispatch(setMenuData(res.data));
       })
       .finally(() => {
         dispatch(setMenuLoading(false));

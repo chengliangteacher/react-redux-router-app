@@ -75,7 +75,7 @@ function Header(props: props) {
             history.push('/v/home');
           }}
         >
-          react后台管理系统模版
+          REACT_ROUTER_RUDUX_NODE
         </h2>
         <div>
           {collapsed ? (
