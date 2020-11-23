@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { getUsersService, getUserService, addUsersService } = require("../service/users")
+const { getUsersService, getUserService, addUsersService, editUsersService, deleteUsersService } = require("../service/users")
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
@@ -16,6 +16,15 @@ router.get('/:id', async function (req, res, next) {
 
 router.post('/', async function (req, res, next) {
     const result = await addUsersService(req.body)
+    res.send(result);
+});
+router.post('/:id', async function (req, res, next) {
+    const result = await editUsersService({...req.body, userId: req.params.id})
+    res.send(result);
+});
+router.delete('/:id', async function (req, res, next) {
+    console.log()
+    const result = await deleteUsersService({userId: req.params.id})
     res.send(result);
 });
 

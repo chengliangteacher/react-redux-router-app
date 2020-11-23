@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Table, Button, Drawer, Form, Input, Tree, Space } from 'antd';
+import { Table, Button, Drawer, Form, Input, Tree, Space, Modal } from 'antd';
 import axios from '../../../api';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { RouteChildrenProps } from 'react-router-dom';
@@ -21,6 +21,8 @@ interface stateTypes {
   btnLoading: boolean;
   menuData: any;
   formInfo: any;
+  delVisible: boolean;
+  delLoading: boolean;
 }
 const layout = {
   labelCol: { span: 6 },
@@ -34,9 +36,11 @@ export default class TestTable extends React.Component<
   RouteChildrenProps,
   stateTypes
 > {
+  public delId: number | null | undefined = null;
   constructor(props: RouteChildrenProps) {
     super(props);
     this.state = {
+      //=====================================分页参数====================================//
       pagination: {
         current: 1,
         pageSize: 20,
@@ -53,17 +57,19 @@ export default class TestTable extends React.Component<
           this.getTableData(page, pageSize);
         },
       },
-      tableData: [],
-      loading: false,
-      addVisible: false,
-      currentRows: null,
-      btnLoading: false,
-      menuData: [],
+      tableData: [], //-----------表格数据
+      loading: false, //-----------表格loading
+      addVisible: false, //-----------新增编辑弹框
+      currentRows: null, //-----------当前行数据
+      btnLoading: false, //-----------新增编辑按钮锁定及loading
+      menuData: [], //-----------新增编辑表单中菜单数据
       formInfo: {
         title: '',
         note: '',
         menuIds: [],
-      },
+      }, //-----------新增编辑表单
+      delVisible: false, //-----------删除弹框
+      delLoading: false, //-----------删除按钮loading
     };
     this.handleChangeForm.bind(this);
   }
@@ -240,6 +246,25 @@ export default class TestTable extends React.Component<
       };
     });
   };
+  //=====================================删除====================================//
+  public handleDeleteRole = () => {
+    this.setState({
+      delLoading: true,
+    });
+    axios
+      .delete(`/role/${this.delId}`)
+      .then((res) => {
+        this.setState({
+          delVisible: false,
+        });
+        this.getTableData();
+      })
+      .finally(() => {
+        this.setState({
+          delLoading: false,
+        });
+      });
+  };
   componentDidMount() {
     this.getTableData();
     this.getMenuData();
@@ -314,7 +339,14 @@ export default class TestTable extends React.Component<
                   >
                     编辑
                   </Button>
-                  <Button danger size="small">
+                  <Button
+                    danger
+                    size="small"
+                    onClick={() => {
+                      this.setState({ delVisible: true });
+                      this.delId = record.id;
+                    }}
+                  >
                     删除
                   </Button>
                 </Space>
@@ -396,6 +428,38 @@ export default class TestTable extends React.Component<
             ''
           )}
         </Drawer>
+        <Modal
+          width={350}
+          title="确认删除"
+          visible={this.state.delVisible}
+          onCancel={() => {
+            this.setState({ delVisible: false });
+          }}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.setState({ delVisible: false });
+              }}
+              disabled={this.state.delLoading}
+            >
+              关闭
+            </Button>,
+            <Button
+              key="submit"
+              onClick={() => {
+                this.handleDeleteRole();
+              }}
+              type="primary"
+              loading={this.state.delLoading}
+            >
+              确定
+            </Button>,
+          ]}
+        >
+          <p className="text-center">删除后数据将无法找回</p>
+          <p className="text-center">是否删除?</p>
+        </Modal>
       </Fragment>
     );
   }

@@ -104,8 +104,31 @@ function editRoles(params) {
         }
     })
 }
+//=====================================新增角色====================================//
+function deleteRoles(params) {
+    return new Promise((resolve, reject) => {
+        let err = "";
+        if (!params.roleId) {
+            if (!params.title) {
+                err = "角色id不能为空"
+            }
+            resolve({ err, code: 500, data: null, msg: err })
+        } else {
+            const rolesql = `DELETE role, menu_role, role_user FROM role, menu_role, role_user WHERE role.id=${params.roleId} AND menu_role.role_id=${params.roleId} AND role_user.role_id=${params.roleId}`
+            connection.query(rolesql, (err, rows) => {
+                console.log(err);
+                if (!err) {
+                    resolve({ err, code: 200, data: rows, msg: "删除成功" })
+                } else {
+                    resolve({ err, code: 500, data: null, msg: err.sqlMessage ? err.sqlMessage : "服务器错误" })
+                }
+            })
+        }
+    })
+}
 module.exports = {
     getRolesDao: getRoles,
     addRolesDao: addRoles,
-    editRolesDao: editRoles
+    editRolesDao: editRoles,
+    deleteRolesDao: deleteRoles
 }

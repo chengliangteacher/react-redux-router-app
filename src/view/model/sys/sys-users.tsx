@@ -1,5 +1,15 @@
 import React, { Fragment } from 'react';
-import { Table, Button, Drawer, Form, Input, Radio, Select } from 'antd';
+import {
+  Table,
+  Button,
+  Drawer,
+  Form,
+  Input,
+  Radio,
+  Select,
+  Space,
+  Modal,
+} from 'antd';
 import axios from '../../../api';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { RouteChildrenProps } from 'react-router-dom';
@@ -12,6 +22,7 @@ interface dataItem {
   status: boolean;
   sex: boolean;
   QQ: string | undefined;
+  roleIds: number[];
 }
 interface stateTypes {
   loading: boolean;
@@ -20,6 +31,10 @@ interface stateTypes {
   addVisible: boolean;
   btnLoading: boolean;
   roleData: any;
+  editId: number | null | undefined;
+  deleteVisible: boolean;
+  delId: number | null | undefined;
+  delLoading: boolean;
 }
 const layout = {
   labelCol: { span: 6 },
@@ -66,6 +81,10 @@ export default class TestTable extends React.Component<
       addVisible: false,
       btnLoading: false,
       roleData: [],
+      editId: null,
+      deleteVisible: false,
+      delLoading: false,
+      delId: null,
     };
   }
   public getTableData = (pageNum: number = 1, pageSize: number = 20): void => {
@@ -100,8 +119,12 @@ export default class TestTable extends React.Component<
       btnLoading: true,
     });
     const data = { ...this.formInfo };
+    let url = '/user';
+    if (this.state.editId) {
+      url = `/user/${this.state.editId}`;
+    }
     axios
-      .post('/user', data)
+      .post(url, data)
       .then((res) => {
         this.setState({
           addVisible: false,
@@ -131,6 +154,14 @@ export default class TestTable extends React.Component<
       addVisible: true,
     });
   };
+  //=====================================编辑用户====================================//
+  public handleEditUser = (val: any) => {
+    this.setState({
+      addVisible: true,
+      editId: val.id,
+    });
+    this.formInfo = val;
+  };
   //=====================================角色数据====================================//
   public getRoleData = () => {
     axios.get('/role').then((res) => {
@@ -138,6 +169,26 @@ export default class TestTable extends React.Component<
         roleData: res.data,
       });
     });
+  };
+  //=====================================删除====================================//
+  public handleDeleteUser = () => {
+    this.setState({
+      delLoading: true,
+    });
+    axios
+      .delete(`/user/${this.state.delId}`)
+      .then((res) => {
+        this.setState({
+          deleteVisible: false,
+          delId: null,
+        });
+        this.getTableData();
+      })
+      .finally(() => {
+        this.setState({
+          delLoading: false,
+        });
+      });
   };
   componentDidMount() {
     this.getTableData();
@@ -205,7 +256,6 @@ export default class TestTable extends React.Component<
             dataIndex="QQ"
             key="QQ"
             align="center"
-            render={(text) => <span>{text === 1 ? '男' : '女'}</span>}
           />
           <Column
             ellipsis={{ showTitle: true }}
@@ -225,139 +275,202 @@ export default class TestTable extends React.Component<
             ellipsis
             title="操作"
             key="action"
-            render={() => (
-              <Button danger size="small">
-                删除
-              </Button>
+            render={(text, record: any) => (
+              <Space>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.handleEditUser(record);
+                  }}
+                  size="small"
+                >
+                  编辑
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.setState({ deleteVisible: true, delId: record.id });
+                  }}
+                  danger
+                  size="small"
+                >
+                  删除
+                </Button>
+              </Space>
             )}
             align="center"
           />
         </Table>
         <Drawer
-          title="新增用户"
+          title={this.state.editId ? '编辑用户' : '新增用户'}
           placement="right"
           width={500}
           visible={this.state.addVisible}
           onClose={() => {
-            this.setState({ addVisible: false });
+            this.setState({ addVisible: false, editId: null });
+            this.formInfo = {
+              name: '',
+              username: '',
+              status: null,
+              sex: null,
+              QQ: '',
+              password: '',
+              roleIds: [],
+              id: null,
+            };
           }}
         >
-          <Form
-            {...layout}
-            name="basic"
-            initialValues={{}}
-            onFinish={this.onFinish}
-            onFinishFailed={this.onFinishFailed}
-          >
-            <Form.Item
-              label="用户名称"
-              name="name"
-              rules={[{ required: true, message: '请输入用户名称' }]}
+          {this.state.addVisible ? (
+            <Form
+              {...layout}
+              name="basic"
+              initialValues={this.formInfo}
+              onFinish={this.onFinish}
+              onFinishFailed={this.onFinishFailed}
             >
-              <Input
-                allowClear
-                disabled={this.state.btnLoading}
-                onChange={(e) => {
-                  this.handleChangeForm('name', e);
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              label="登录名称"
-              name="username"
-              rules={[{ required: true, message: '请输入登录名称' }]}
-            >
-              <Input
-                allowClear
-                disabled={this.state.btnLoading}
-                onChange={(e) => {
-                  this.handleChangeForm('username', e);
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              label="密码"
-              name="password"
-              rules={[{ required: true, message: '请输入密码' }]}
-            >
-              <Input.Password
-                allowClear
-                disabled={this.state.btnLoading}
-                onChange={(e) => {
-                  this.handleChangeForm('password', e);
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              label="用户性别"
-              name="sex"
-              rules={[{ required: true, message: '请选择用户性别' }]}
-            >
-              <Radio.Group
-                onChange={(e) => {
-                  this.handleChangeForm('sex', e);
-                }}
+              <Form.Item
+                label="用户名称"
+                name="name"
+                rules={[{ required: true, message: '请输入用户名称' }]}
               >
-                <Radio value={1}>男</Radio>
-                <Radio value={2}>女</Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item
-              label="是否启用"
-              name="status"
-              rules={[{ required: true, message: '请选择是否启用' }]}
-            >
-              <Radio.Group
-                onChange={(e) => {
-                  this.handleChangeForm('status', e);
-                }}
+                <Input
+                  allowClear
+                  disabled={this.state.btnLoading}
+                  onChange={(e) => {
+                    this.handleChangeForm('name', e);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                label="登录名称"
+                name="username"
+                rules={[{ required: true, message: '请输入登录名称' }]}
               >
-                <Radio value={1}>是</Radio>
-                <Radio value={0}>否</Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item label="qq号码" name="QQ">
-              <Input
-                allowClear
-                disabled={this.state.btnLoading}
-                onChange={(e) => {
-                  this.handleChangeForm('QQ', e);
-                }}
-              />
-            </Form.Item>
-            <Form.Item
-              label="角色"
-              name="roleIds"
-              rules={[{ required: true, message: '请选择角色' }]}
-            >
-              <Select
-                mode="multiple"
-                allowClear
-                style={{ width: '100%' }}
-                onChange={(val) => {
-                  this.handleChangeForm('roleIds', val);
-                }}
+                <Input
+                  allowClear
+                  disabled={this.state.btnLoading}
+                  onChange={(e) => {
+                    this.handleChangeForm('username', e);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                label="密码"
+                name="password"
+                rules={[{ required: true, message: '请输入密码' }]}
               >
-                {this.state.roleData.map((item: any) => {
-                  return (
-                    <Option key={item.id} value={item.id}>
-                      {item.title}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-            <Form.Item {...tailLayout}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={this.state.btnLoading}
+                <Input.Password
+                  allowClear
+                  disabled={this.state.btnLoading}
+                  onChange={(e) => {
+                    this.handleChangeForm('password', e);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                label="用户性别"
+                name="sex"
+                rules={[{ required: true, message: '请选择用户性别' }]}
               >
-                保存
-              </Button>
-            </Form.Item>
-          </Form>
+                <Radio.Group
+                  onChange={(e) => {
+                    this.handleChangeForm('sex', e);
+                  }}
+                >
+                  <Radio value={1}>男</Radio>
+                  <Radio value={2}>女</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item
+                label="是否启用"
+                name="status"
+                rules={[{ required: true, message: '请选择是否启用' }]}
+              >
+                <Radio.Group
+                  onChange={(e) => {
+                    this.handleChangeForm('status', e);
+                  }}
+                >
+                  <Radio value={1}>是</Radio>
+                  <Radio value={0}>否</Radio>
+                </Radio.Group>
+              </Form.Item>
+              <Form.Item label="qq号码" name="QQ">
+                <Input
+                  allowClear
+                  disabled={this.state.btnLoading}
+                  onChange={(e) => {
+                    this.handleChangeForm('QQ', e);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                label="角色"
+                name="roleIds"
+                rules={[{ required: true, message: '请选择角色' }]}
+              >
+                <Select
+                  mode="multiple"
+                  allowClear
+                  style={{ width: '100%' }}
+                  onChange={(val) => {
+                    this.handleChangeForm('roleIds', val);
+                  }}
+                >
+                  {this.state.roleData.map((item: any) => {
+                    return (
+                      <Option key={item.id} value={item.id}>
+                        {item.title}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </Form.Item>
+              <Form.Item {...tailLayout}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={this.state.btnLoading}
+                >
+                  保存
+                </Button>
+              </Form.Item>
+            </Form>
+          ) : (
+            ''
+          )}
         </Drawer>
+        <Modal
+          width={350}
+          title="确认删除"
+          visible={this.state.deleteVisible}
+          onCancel={() => {
+            this.setState({ deleteVisible: false });
+          }}
+          footer={[
+            <Button
+              key="back"
+              onClick={() => {
+                this.setState({ deleteVisible: false });
+              }}
+              disabled={this.state.delLoading}
+            >
+              关闭
+            </Button>,
+            <Button
+              key="submit"
+              onClick={() => {
+                this.handleDeleteUser();
+              }}
+              type="primary"
+              loading={this.state.delLoading}
+            >
+              确定
+            </Button>,
+          ]}
+        >
+          <p className="text-center">删除后数据将无法找回</p>
+          <p className="text-center">是否删除?</p>
+        </Modal>
       </Fragment>
     );
   }

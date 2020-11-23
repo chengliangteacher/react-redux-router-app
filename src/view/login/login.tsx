@@ -50,7 +50,7 @@ export default class Login extends React.Component<props, stateTypes> {
       .then((res: any): void => {
         //=====================================储存用户信息与菜单====================================//
         sessionStorage.token = res.token;
-        this.props.history.push('/v/test-form');
+        this.props.history.push('/v/home');
       })
       .finally((): void => {
         this.setState({
