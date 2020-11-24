@@ -21,6 +21,10 @@ function Header(props: props) {
     sessionStorage.clear();
     props.history.push('/login');
   };
+  const userData = sessionStorage.userData
+    ? JSON.parse(sessionStorage.userData)
+    : {};
+  console.log(userData);
   const { collapsed, history } = props;
   const menu = (
     <Menu>
@@ -100,7 +104,7 @@ function Header(props: props) {
             className="ant-dropdown-link"
             onClick={(e) => e.preventDefault()}
           >
-            张卫健 <DownOutlined />
+            {userData.name} <DownOutlined />
           </a>
         </Dropdown>
       </div>

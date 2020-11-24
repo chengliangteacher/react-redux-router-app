@@ -37,7 +37,7 @@ router.post('/', async function (req, res, next) {
         )
 
     }
-    req.session.user_id = result.data[0].id;
+    req.session.user_id = result.data.id;
     res.send({ ...result, token });
 });
 

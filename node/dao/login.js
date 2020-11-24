@@ -6,7 +6,16 @@ function login(params) {
     return new Promise((resolve, reject) => {
         const sql = `SELECT * from user WHERE username='${params.username}' and password=${params.password}`
         connection.query(sql, (err, rows) => {
-            if (err) {
+            if (!err) {
+                resolve({
+                    success: rows.length ? true : false,
+                    data: rows.length ? rows[0] : {},
+                    err,
+                    msg: rows.length ? "登录成功" : "用户名或密码错误",
+                    code: rows.length ? 200 : 500
+                })
+
+            } else {
                 resolve({
                     success: false,
                     data: null,
@@ -14,16 +23,7 @@ function login(params) {
                     msg: "用户名密码错误",
                     code: 500
                 })
-                return;
             }
-            resolve({
-                success: rows.length ? true : false,
-                data: rows,
-                err,
-                msg: rows.length ? "登录成功" : "用户名或密码错误",
-                code: rows.length ? 200 : 500
-            })
-
         })
     })
 }
