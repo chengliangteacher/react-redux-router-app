@@ -221,7 +221,7 @@ export default class TestTable extends React.Component<
         for (let key in this.selectKeys) {
           state.formInfo.menuIds.push(Number(key));
         }
-        resolve();
+        resolve(state);
         return {
           formInfo: state.formInfo,
         };
