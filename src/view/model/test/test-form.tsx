@@ -59,12 +59,12 @@ interface formTypes {
 }
 function TestForm(props: props) {
   /* 
-          @description  页面响应data
-          @autor        cheng liang
-          @create       2020-11-10 09:12"
-          @params       
-          @return       
-      */
+        @description  页面响应data
+        @autor        cheng liang
+        @create       2020-11-10 09:12"
+        @params       
+        @return       
+    */
   const [organizationsData, setOrganizationsData] = useState([]); // 任务来源下拉
   const [companysData, setCompanysData] = useState([]); // 检验，抽样机构下拉
   const [regulationPlansData, setRegulationPlansData] = useState([]); // 校验规则下拉

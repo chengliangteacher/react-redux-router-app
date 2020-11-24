@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import model from './model';
+import webViewModel from './web';
 const routes = [
   {
     title: '登录',
@@ -17,6 +18,12 @@ const routes = [
     path: '/v',
     component: lazy(() => import('../view/layout/index')),
     children: model,
+  },
+  //=====================================门户网站页====================================//
+  {
+    path: '/webview',
+    component: lazy(() => import('../web-view/layout/index')),
+    children: webViewModel,
   },
   {
     title: '404',

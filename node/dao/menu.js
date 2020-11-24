@@ -33,7 +33,7 @@ function deepMenus(groupData, linkData) {
 function getMenus(user_id) {
     return new Promise((resolve, reject) => {
         if (user_id) {
-            const sql = `SELECT * FROM menu WHERE id=ANY(SELECT menu_id FROM menu_role WHERE role_id=(SELECT role_id FROM role_user WHERE user_id=${user_id}))`
+            const sql = `SELECT * FROM menu WHERE id=ANY(SELECT menu_id FROM menu_role WHERE role_id=(SELECT role_id FROM role_user WHERE user_id=${user_id})) ORDER BY menu.order`
             connection.query(sql, (err, rows) => {
                 if (!err) {
                     let data = [...rows];
@@ -56,7 +56,7 @@ function getMenus(user_id) {
 }
 function getMenuAll() {
     return new Promise((resolve, reject) => {
-        const sql = `SELECT * FROM menu`
+        const sql = `SELECT * FROM menu ORDER BY menu.order`
         connection.query(sql, (err, rows) => {
             if (!err) {
                 let data = [...rows];

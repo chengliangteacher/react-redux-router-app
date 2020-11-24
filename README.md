@@ -2,12 +2,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-In the project directory, you can run:
+启动运行：
 
 ### `yarn start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+运行开发环境<br />
+在浏览器打开[http://localhost:8081](http://localhost:8081)
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.

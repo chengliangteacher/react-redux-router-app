@@ -21,5 +21,10 @@ const test = [
     component: lazy(() => import('../../view/model/test/child/add-users')),
     isBack: true,
   },
+  {
+    title: 'TsetComponent',
+    path: '/v/test-component',
+    component: lazy(() => import('../../view/model/test/test-component')),
+  },
 ];
 export default test;
