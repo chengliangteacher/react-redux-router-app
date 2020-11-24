@@ -7,7 +7,7 @@ function uploadFile(req) {
                 return;
             }
             let data = req.file;
-            let photo = req.file.path;
+            // let photo = req.file.path;
             resolve({ err, code: 200, data })
         })
     })

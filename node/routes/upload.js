@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const { uploadFileService } = require("../service/upload")
 const fs = require("fs")
-console.log(fs)
 const multer = require("multer")
 let createFolder = function (folder) {
     try {

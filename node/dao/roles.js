@@ -40,7 +40,6 @@ function addRoles(params) {
                         const values = params.menuIds.map(item => {
                             return [item, rows.insertId]
                         })
-                        console.log(values);
                         const roleMenuSql = `insert into menu_role(menu_id, role_id) values ?`
                         connection.query(roleMenuSql, [values], (err2, rows2) => {
                             if (!err2) {
@@ -116,7 +115,6 @@ function deleteRoles(params) {
         } else {
             const rolesql = `DELETE role, menu_role, role_user FROM role, menu_role, role_user WHERE role.id=${params.roleId} AND menu_role.role_id=${params.roleId} AND role_user.role_id=${params.roleId}`
             connection.query(rolesql, (err, rows) => {
-                console.log(err);
                 if (!err) {
                     resolve({ err, code: 200, data: rows, msg: "删除成功" })
                 } else {

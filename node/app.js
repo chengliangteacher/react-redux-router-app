@@ -36,7 +36,7 @@ app.use(expressJwt({
     secret: "token",
     algorithms: ['HS256']
 }).unless({
-    path: ["/api/login", "/api/getcode"]
+    path: ["/api/login", "/api/getcode", "/uploads"]
 })
 )
 app.use(function (err, req, res, next) {
