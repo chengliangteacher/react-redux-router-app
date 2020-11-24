@@ -18,6 +18,7 @@ var regulationPlansRouter = require('./routes/regulationPlans');
 var menusRouter = require('./routes/menu');
 var codeRouter = require('./routes/code');
 var rolesRouter = require('./routes/roles');
+var uploadRouter = require('./routes/upload');
 
 var app = express();
 
@@ -73,6 +74,7 @@ app.use('/api/regulationPlans', regulationPlansRouter);
 app.use('/api/menu', menusRouter);
 app.use('/api/getcode', codeRouter);
 app.use('/api/role', rolesRouter);
+app.use('/api/upload', uploadRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

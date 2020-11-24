@@ -26,5 +26,10 @@ const test = [
     path: '/v/test-component',
     component: lazy(() => import('../../view/model/test/test-component')),
   },
+  {
+    title: 'TsetUpload',
+    path: '/v/test-upload',
+    component: lazy(() => import('../../view/model/test/test-upload')),
+  },
 ];
 export default test;
