@@ -19,12 +19,14 @@ var menusRouter = require('./routes/menu');
 var codeRouter = require('./routes/code');
 var rolesRouter = require('./routes/roles');
 var uploadRouter = require('./routes/upload');
+var viewFileRouter = require("./routes/viewFile")
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
 /* 
     @description  jwt验证登录
     @autor        cheng liang
@@ -36,7 +38,7 @@ app.use(expressJwt({
     secret: "token",
     algorithms: ['HS256']
 }).unless({
-    path: ["/api/login", "/api/getcode", "/uploads"]
+    path: ["/api/login", "/api/getcode", /^\/uploads\/.*/]
 })
 )
 app.use(function (err, req, res, next) {
@@ -75,6 +77,8 @@ app.use('/api/menu', menusRouter);
 app.use('/api/getcode', codeRouter);
 app.use('/api/role', rolesRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/uploads', viewFileRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

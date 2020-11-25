@@ -10,7 +10,7 @@ let createFolder = function (folder) {
         fs.mkdirSync(folder);
     }
 }
-let uploadFolder = "./uploads/";
+let uploadFolder = "./node/uploads/";
 createFolder(uploadFolder);
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {

@@ -6,6 +6,7 @@
 .pnp.js
 /node/node_modules
 /uploads
+/node/uploads
 
 # testing
 /coverage

@@ -1,7 +1,8 @@
 const fs = require("fs")
 function uploadFile(req) {
     return new Promise((resolve, reject) => {
-        fs.rename(req.file.path, "uploads/" + req.file.originalname, function (err) {
+        console.log(req.file.path)
+        fs.rename(req.file.path, "node/uploads/" + req.file.originalname, function (err) {
             if (err) {
                 resolve({ err, code: 500, data: null, msg: "图片上传失败" })
                 return;
