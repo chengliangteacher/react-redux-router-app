@@ -25,7 +25,6 @@ export default class GEcharts extends React.Component<props> {
   //=====================================监听页面宽高缩放改变实例大小====================================//
   handleChangeSize() {
     window.addEventListener('resize', () => {
-      console.log('ininini');
       this.echartsInstance.resize();
     });
   }

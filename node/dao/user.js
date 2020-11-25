@@ -21,7 +21,6 @@ function getUser(id) {
 }
 //=====================================新增用户====================================//
 function addUsers(params) {
-    console.log(params)
     return new Promise((resolve, reject) => {
         let err = "";
         if (!params.name || !params.username || !params.password || !params.sex || params.status === null || params.status === undefined || !params.roleIds || !params.roleIds.length) {
@@ -131,7 +130,6 @@ function deleteUsers(params) {
         } else {
             const rolesql = `DELETE user, role_user FROM user, role_user WHERE user.id=${params.userId} AND role_user.user_id=${params.userId}`
             connection.query(rolesql, (err, rows) => {
-                console.log(err);
                 if (!err) {
                     resolve({ err, code: 200, data: rows, msg: "删除成功" })
                 } else {

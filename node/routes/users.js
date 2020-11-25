@@ -23,7 +23,6 @@ router.post('/:id', async function (req, res, next) {
     res.send(result);
 });
 router.delete('/:id', async function (req, res, next) {
-    console.log()
     const result = await deleteUsersService({userId: req.params.id})
     res.send(result);
 });

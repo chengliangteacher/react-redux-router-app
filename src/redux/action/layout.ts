@@ -72,7 +72,6 @@ export const deleteRouterTag = (id?: number) => {
 export const afterDeleteRouterTag = (router: routerItemTypes, history: any) => {
   return (dispatch: any, getState: () => Store) => {
     const tagsData = getState().layout.tagDatas;
-    console.log(tagsData);
     if (router.pathname === history.location.pathname) {
       const index = tagsData.findIndex(
         (item: any) => item.pathname === router.pathname
