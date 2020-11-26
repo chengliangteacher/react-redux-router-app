@@ -34,7 +34,7 @@ const tailLayout = {
   wrapperCol: { offset: 6, span: 18 },
 };
 
-export default class TestTable extends React.Component<
+export default class SysRole extends React.Component<
   RouteChildrenProps,
   stateTypes
 > {

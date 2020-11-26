@@ -4,7 +4,7 @@ const connection = mysql.createConnection($config);
 connection.connect()
 function getUsers() {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT user.id, user.create_time, user.QQ, user.status, user.update_time, user.sex, user.name, user.username, GROUP_CONCAT(role_user.role_id)roleIds FROM user LEFT JOIN role_user ON user.id=role_user.user_id GROUP BY user.id"
+        const sql = "SELECT user.id, user.create_time, user.QQ, user.status, user.update_time, user.sex, user.name, user.username, user.avatar, GROUP_CONCAT(role_user.role_id)roleIds FROM user LEFT JOIN role_user ON user.id=role_user.user_id GROUP BY user.id"
         connection.query(sql, (err, rows) => {
             const data = rows.map(item => Object.assign(item, { roleIds: item.roleIds.split(",").map(item2 => Number(item2)) }))
             resolve({ err, code: 200, data: [...data] })
@@ -39,7 +39,7 @@ function addUsers(params) {
             }
             resolve({ err, code: 500, data: null, msg: err })
         } else {
-            const rolesql = `INSERT INTO user(name, username, password, sex, status, QQ) VALUE ("${params.name}", "${params.username}", "${params.password}", "${params.sex}", "${params.status}", "${params.QQ}")`
+            const rolesql = `INSERT INTO user(name, username, password, sex, status, QQ, avatar) VALUE ("${params.name}", "${params.username}", "${params.password}", "${params.sex}", "${params.status}", "${params.QQ}"), "${params.avatar}")`
             connection.query(rolesql, (err, rows) => {
                 if (!err) {
                     if (rows && rows.insertId) {
@@ -87,7 +87,7 @@ function editUsers(params) {
             }
             resolve({ err, code: 500, data: null, msg: err })
         } else {
-            const rolesql = `UPDATE user SET name="${params.name}", username="${params.username}", sex="${params.sex}", QQ="${params.QQ}", status="${params.status}", password="${params.password}" WHERE id=${params.userId}`
+            const rolesql = `UPDATE user SET name="${params.name}", username="${params.username}", sex="${params.sex}", QQ="${params.QQ}", status="${params.status}", password="${params.password}", avatar="${params.avatar}" WHERE id=${params.userId}`
             connection.query(rolesql, (err, rows) => {
                 if (!err) {
                     const values = params.roleIds.map(item => {

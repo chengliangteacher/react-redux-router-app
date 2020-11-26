@@ -13,6 +13,7 @@ import {
 import axios from '../../../api';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { RouteChildrenProps } from 'react-router-dom';
+import GUploadImg from '../../../components/g-upload-img';
 const { Column } = Table;
 const { Option } = Select;
 //=====================================表格数据类型====================================//
@@ -24,6 +25,7 @@ interface dataItem {
   sex: boolean;
   QQ: string | undefined;
   roleIds: number[];
+  avatar: string;
 }
 //=====================================state数据类型====================================//
 interface stateTypes {
@@ -37,6 +39,7 @@ interface stateTypes {
   deleteVisible: boolean;
   delId: number | null | undefined;
   delLoading: boolean;
+  avatar: string;
 }
 const layout = {
   labelCol: { span: 6 },
@@ -46,7 +49,7 @@ const tailLayout = {
   wrapperCol: { offset: 6, span: 18 },
 };
 
-export default class TestTable extends React.Component<
+export default class SysUsers extends React.Component<
   RouteChildrenProps,
   stateTypes
 > {
@@ -58,6 +61,7 @@ export default class TestTable extends React.Component<
     QQ: '',
     password: '',
     roleIds: [],
+    avatar: '',
   }; //-----------form数据
   constructor(props: RouteChildrenProps) {
     super(props);
@@ -85,6 +89,7 @@ export default class TestTable extends React.Component<
       btnLoading: false, //-------提交后台加载动画
       roleData: [], //-------角色数据
       editId: null, //-------编辑所需id
+      avatar: '', //-------已上传的头像
       deleteVisible: false, //-------删除弹框变量
       delLoading: false, //-------删除提交后台加载动画
       delId: null, //-------删除所需id
@@ -164,6 +169,7 @@ export default class TestTable extends React.Component<
     this.setState({
       addVisible: true,
       editId: val.id,
+      avatar: val.avatar,
     });
     this.formInfo = val;
   };
@@ -194,6 +200,10 @@ export default class TestTable extends React.Component<
           delLoading: false,
         });
       });
+  };
+  //=====================================监听图片上传返回值====================================//
+  public handleListenUploadImg = (data: any) => {
+    this.formInfo.avatar = data.data.name;
   };
   componentDidMount() {
     this.getTableData();
@@ -311,7 +321,7 @@ export default class TestTable extends React.Component<
           width={500}
           visible={this.state.addVisible}
           onClose={() => {
-            this.setState({ addVisible: false, editId: null });
+            this.setState({ addVisible: false, editId: null, avatar: '' });
             this.formInfo = {
               name: '',
               username: '',
@@ -429,6 +439,21 @@ export default class TestTable extends React.Component<
                     );
                   })}
                 </Select>
+              </Form.Item>
+              <Form.Item label="头像" name="avatar">
+                <GUploadImg
+                  handleListenUploadImg={this.handleListenUploadImg}
+                  singleFile={
+                    this.formInfo.avatar
+                      ? {
+                          name: this.formInfo.avatar,
+                          uid: this.state.avatar,
+                          statis: 'done',
+                          url: this.state.avatar,
+                        }
+                      : null
+                  }
+                />
               </Form.Item>
               <Form.Item {...tailLayout}>
                 <Button

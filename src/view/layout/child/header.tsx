@@ -9,6 +9,8 @@ import { Menu, Dropdown } from 'antd';
 import { requesGlobalData, setCollapsed } from '../../../redux/action/layout';
 import { RouteChildrenProps } from 'react-router-dom';
 import { Store } from 'antd/lib/form/interface';
+import Avatar from 'antd/lib/avatar/avatar';
+import { developNodeImgUrl } from '../../../api/ApiIp';
 interface otherTypes {
   collapsed: boolean;
   dispatch?: any;
@@ -103,7 +105,16 @@ function Header(props: props) {
             className="ant-dropdown-link"
             onClick={(e) => e.preventDefault()}
           >
-            {userData.name} <DownOutlined />
+            {userData.name}
+            {userData.avatar ? (
+              <Avatar
+                style={{ marginRight: '5px' }}
+                src={developNodeImgUrl + userData.avatar}
+              ></Avatar>
+            ) : (
+              ''
+            )}
+            <DownOutlined />
           </a>
         </Dropdown>
       </div>
