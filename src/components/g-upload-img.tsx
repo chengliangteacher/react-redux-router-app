@@ -38,12 +38,12 @@ export default class GUploadImg extends React.Component<propTypes, stateTypes> {
     };
   }
   /* 
-        @description  监听上传图片变化监听
-        @autor        cheng liang
-        @create       2020-11-26 10:36"
-        @params       info = { file, filelist }
-        @return       
-    */
+          @description  监听上传图片变化监听
+          @autor        cheng liang
+          @create       2020-11-26 10:36"
+          @params       info = { file, filelist }
+          @return       
+      */
   public handleOnchange = (info: any) => {
     if (info.file.status === 'uploading') {
       this.setState({
@@ -68,12 +68,12 @@ export default class GUploadImg extends React.Component<propTypes, stateTypes> {
     }
   };
   /* 
-        @description  上传文件之前的钩子
-        @autor        cheng liang
-        @create       2020-11-26 10:35"
-        @params       file: 当前上传的图片对象 fileList: 上传成功的文件列表
-        @return       
-    */
+          @description  上传文件之前的钩子
+          @autor        cheng liang
+          @create       2020-11-26 10:35"
+          @params       file: 当前上传的图片对象 fileList: 上传成功的文件列表
+          @return       
+      */
   public beforeUpload = (file: File, fileList: Array<File>): boolean => {
     if (
       file.type !== 'image/png' &&
@@ -98,12 +98,12 @@ export default class GUploadImg extends React.Component<propTypes, stateTypes> {
     return true;
   };
   /* 
-        @description  自定义预览
-        @autor        cheng liang
-        @create       2020-11-26 10:35"
-        @params       当前点击预览的图片对象
-        @return       
-    */
+          @description  自定义预览
+          @autor        cheng liang
+          @create       2020-11-26 10:35"
+          @params       当前点击预览的图片对象
+          @return       
+      */
   public handlePreview = (file: any) => {
     if (!file.url && !file.preview) {
       file.preview = developNodeImgUrl + file.name;
@@ -111,12 +111,12 @@ export default class GUploadImg extends React.Component<propTypes, stateTypes> {
     window.open(file.preview);
   };
   /* 
-        @description  自定义删除
-        @autor        cheng liang
-        @create       2020-11-26 10:34"
-        @params       file: 当前点击删除的图片对象
-        @return       boolean
-    */
+          @description  自定义删除
+          @autor        cheng liang
+          @create       2020-11-26 10:34"
+          @params       file: 当前点击删除的图片对象
+          @return       boolean
+      */
   public handleOnRemove = (file: any): boolean => {
     this.setState(
       (state) => {

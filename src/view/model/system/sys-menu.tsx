@@ -77,6 +77,7 @@ export default class SysMenu extends React.Component<
       deleteVisible: false,
     };
   }
+  //=====================================请求表格数据====================================//
   public getTableData = (pageNum: number = 1, pageSize: number = 20): void => {
     this.setState({
       loading: true,
