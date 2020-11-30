@@ -9,8 +9,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 运行开发环境<br />
 在浏览器打开[http://localhost:8081](http://localhost:8081)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+热加载您的改动<br />
 
 ### `yarn test`
 
@@ -19,50 +18,70 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+建立生产环境的包
 
 ### `yarn eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+暴露出脚本以及webpack配置项
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### `yarn serve`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+启动node后台服务（ps：需要建立本地mysql库、安装node文件下的依赖包以及导入所需mysql表）
 
-## Learn More
+### `目录`
+```
+|--build //-----生产环境包
+|--node
+|---|-bin //-----启动配置文件
+|---|-dao //-----数据层文件
+|---|-node_modules //-----依赖包
+|---|-public //-----node静态文件
+|---|-routes //-----路由层文件
+|---|-service //-----服务层文件
+|---|-uploads //-----图片上传存放位置
+|---|-views //-----页面显示
+|---|-app.js //-----node入口文件
+|---|-mysql.js //-----mysql配置文件
+|---|-package.json //-----依赖包json
+|-node_modules //-----依赖包
+|---public //-----静态文件
+|--src //-----主业务文件
+|---|-api //-----全局请求封装
+|---|-components //-----全局组件
+|---|-less //-----项目全局less
+|---|-mobile-view //-----h5页面
+|---|-redux //-----react-redux状态机
+|---|-router //-----路由文件
+|---|-utils //-----工具类函数
+|---|-view //-----系统页面
+|---|-web-view //-----门户页面
+|---|-app.tsx //-----项目主文件
+|---|-index.d.ts //-----全局类型声明
+|---|-index.tsx //-----项目入口文件
+|--.env //-----create-react-app配置以及环境变量定义文件
+|--.gitignore //-----git配置文件
+|--.README.md //-----项目说明，mackdown文档
+|--tsconfig.json //-----typescript配置文件
+|--yarn.lock //-----yarn命令lock文件（yarn下载时如有此文件会更快）
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## react开发规范
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### `使用less全局类`
 
-### Code Splitting
+项目css使用全局less中的类，避免滥用行内样式，主要集中until.less(布局类等)和variables.less(颜色类及变量)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### `严格遵守typescript开发规范`
 
-### Analyzing the Bundle Size
+项目使用typescript开发，必须明确标注变量类型，提交代码前需检查是否通过tslint校验，禁止滥用any类型
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
 
-### Making a Progressive Web App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### Advanced Configuration
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
 
-### Deployment
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
 
-### `yarn build` fails to minify
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
