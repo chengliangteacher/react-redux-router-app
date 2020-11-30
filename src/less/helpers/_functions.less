@@ -1,0 +1,15 @@
+/* 
+    @description  less函数声明
+    @autor        cheng liang
+    @create       2020-11-27 15:14"
+    @params       
+    @return       
+*/
+@charset "utf-8";
+
+
+@default-w: 375px;
+//=====================================h5单位换算函数====================================//
+.size(@name, @px) {
+    @{name}: unit((@px / @default-w) * 100vw, vw)
+}

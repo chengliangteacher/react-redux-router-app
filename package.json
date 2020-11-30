@@ -4,6 +4,7 @@
     "private": true,
     "homepage": "./",
     "dependencies": {
+        "@craco/craco": "^5.8.0",
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
@@ -19,13 +20,12 @@
         "@types/react-transition-group": "^4.4.0",
         "@types/redux-logger": "^3.0.8",
         "@types/redux-thunk": "^2.1.0",
-        "antd": "^4.7.2",
+        "antd": "^4.8.6",
         "axios": "^0.20.0",
+        "craco-less": "^1.17.1",
         "echarts": "^4.9.0",
-        "husky": "^4.3.0",
         "lint-staged": "^10.4.0",
         "md5": "^2.3.0",
-        "node-sass": "^4.14.1",
         "nprogress": "^0.2.0",
         "prettier": "^2.1.2",
         "react": "17.0.0",
@@ -42,26 +42,15 @@
     },
     "scripts": {
         "analyze": "source-map-explorer build/static/js/main.*",
-        "starts": "HTTPS=true react-scripts start",
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
+        "starts": "HTTPS=true craco start",
+        "start": "craco start",
+        "build": "craco build",
+        "test": "craco test",
+        "eject": "craco eject",
         "serve": "node ./node/bin/www"
     },
     "eslintConfig": {
         "extends": "react-app"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
-    },
-    "lint-staged": {
-        "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-            "prettier --single-quote --write",
-            "git add"
-        ]
     },
     "browserslist": {
         "production": [

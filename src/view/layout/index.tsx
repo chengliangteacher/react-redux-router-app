@@ -4,7 +4,6 @@ import Banner from './child/banner';
 import Content from './child/content';
 import TagView from './child/tag-view';
 import { connect } from 'react-redux';
-import './layout.scss';
 import { requesGlobalData, requestMenuData } from '../../redux/action/layout';
 import { routerConfigItemTypes } from '../../index.d';
 import { RouteChildrenProps } from 'react-router-dom';

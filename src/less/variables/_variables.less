@@ -1,0 +1,137 @@
+@charset "utf-8";
+//=========================================================================//
+//=============================颜色定义=====================================//
+//=========================================================================//
+
+//=====================================白色到黑色的渐变定义====================================//
+@white: #fff;
+@gray-100: #f8f9fa;
+@gray-200: #e9ecef;
+@gray-300: #dee2e6;
+@gray-400: #ced4da;
+@gray-500: #adb5bd;
+@gray-600: #6c757d;
+@gray-700: #495057;
+@gray-800: #343a40;
+@gray-900: #212529;
+@black: #000;
+
+@gray: {
+    100: @gray-100;
+    200: @gray-200;
+    300: @gray-300;
+    400: @gray-400;
+    500: @gray-500;
+    600: @gray-600;
+    700: @gray-700;
+    800: @gray-800;
+    900: @gray-900;
+}
+
+//===================================常见颜色定义======================================//
+@blue: #007bff;
+@red: #c62f2f;
+@orange: #fd7e14;
+@yellow: #ffc107;
+@green: #28a745;
+@purple: #6f42c1;
+@indigo: #6610f2; //靛蓝色
+@pink: #f9a2c4;
+@teal: #20c997; //青色
+@cyan: #17a2b8; //蓝绿色
+
+@theme-color: #00a961; //主题色定义
+
+@colors: {
+    blue: @blue;
+    indigo: @indigo;
+    purple: @purple;
+    pink: @pink;
+    red: @red;
+    orange: @orange;
+    yellow: @yellow;
+    green: @green;
+    teal: @teal;
+    cyan: @cyan;
+    black: @black;
+    white: @white;
+    theme-color: @theme-color;
+}
+
+;
+
+//=====================================提示色，主题色====================================//
+@primary: @blue; //主要的
+@secondary: @gray-600; //次要的颜色
+@success: @green; //成功绿
+@info: @cyan; //信息蓝
+@warning: @yellow; //警告黄
+@danger: @red; //危险红
+@light: @gray-100; //明亮
+@dark: @gray-800; //暗淡
+
+@theme-colors: {
+    primary: @primary;
+    secondary: @secondary;
+    success: @success;
+    info: @info;
+    warning: @warning;
+    danger: @danger;
+    light: @light;
+    dark: @dark;
+}
+
+//=====================================特殊颜色====================================//
+@body-bg: #f8f9fa; //背景色
+
+//=========================================================================//
+//=============================z-index=====================================//
+//=========================================================================//
+
+//常见z-index的值
+@zindex-model: 3333; //模态框
+@zindex-shadow: 3334; //模态框
+@zindex-tools: 3335; //模态框
+@zindex-banner: 3336; //模态框
+@zindex-tabs: 3336; //模态框
+@zindex-full-screen: 3337; //模态框
+
+//=========================================================================//
+//=============================公共样式变量=================================//
+//=========================================================================//
+
+//圆角
+@border-radius-sm: 3px;
+@border-radius: 6px;
+@border-radius-lg: 9px;
+
+//============================box-shadow==============================================//
+@box-shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.12);
+@box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.1);
+@box-shadow-lg: 0 2px 12px rgba(0, 0, 0, 0.3);
+
+//============================================文字=========================================//
+
+@font-weight-base: 400;
+@font-weight-light: 300;
+@font-weight-bold: 700;
+
+//==========================================字体大小============================================//
+
+@font-size-base: 1rem; //默认浏览器字体为16px，全局设置会改变默认字体大小
+@font-size-sm: (@font-size-base * 0.875);
+@font-size-xs: (@font-size-base * 0.75);
+@font-size-bg: (@font-size-base * 1.125);
+@font-size-lg: (@font-size-base * 1.35);
+@font-size-ex: (@font-size-base * 2);
+
+//==============================border-radius=================//
+
+@border-radius: {
+    radius-sm: 2px;
+    radius-xs: 3px;
+    radius-md: 4px;
+    radius-bg: 5px;
+    radius-lg: 6px;
+    radius-round: 50%;
+}
