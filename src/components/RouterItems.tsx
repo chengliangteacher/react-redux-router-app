@@ -9,6 +9,7 @@ import React, { Suspense, useState, useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import nprogress from 'nprogress';
 import 'nprogress/nprogress.css';
+//=====================================router对象类型====================================//
 interface routerConfig {
   path?: string;
   children?: routerConfig[];

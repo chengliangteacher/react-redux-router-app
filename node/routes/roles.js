@@ -4,7 +4,7 @@ const { getRolesService, addRolesService, editRolesService, deleteRolesService }
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
-    const result = await getRolesService()
+    const result = await getRolesService(req.query)
     res.send(result);
 });
 

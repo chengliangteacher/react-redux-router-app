@@ -2,8 +2,8 @@ const { getMenusDao, getMenuAllDao, addMenuDao, editMenuDao,deleteMenusDao } = r
 const getMenus = async (user_id) => {
     return await getMenusDao(user_id)
 }
-const getMenusAll = async () => {
-    return await getMenuAllDao()
+const getMenusAll = async (params) => {
+    return await getMenuAllDao(params)
 }
 const addMenu = async (params) => {
     return await addMenuDao(params)

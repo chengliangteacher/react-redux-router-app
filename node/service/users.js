@@ -1,6 +1,6 @@
 const { getUsersDao, getUserDao, addUsersDao, editUsersDao, deleteUsersDao } = require("../dao/user")
-const getUsers = async () => {
-    return await getUsersDao()
+const getUsers = async (params) => {
+    return await getUsersDao(params)
 }
 const getUser = async (id) => {
     return await getUserDao(id)

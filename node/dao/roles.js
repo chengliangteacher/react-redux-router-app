@@ -2,17 +2,27 @@ const mysql = require("mysql");
 const $config = require("../mysql")
 const connection = mysql.createConnection($config);
 connection.connect()
-function getRoles() {
+function getRoles(params) {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT role.id, role.title, role.note, GROUP_CONCAT(menu_role.menu_id)menuIds,role.create_time, role.update_time FROM role LEFT JOIN menu_role ON role.id=menu_role.role_id GROUP BY role.id"
+        const pageNum = params.pageNum && params.pageSize ?  (Number(params.pageNum) - 1) * Number(params.pageSize) : 0; 
+        const pageSize = params.pageSize ? Number(params.pageSize) : 20;
+        const sql = `SELECT role.id, role.title, role.note, GROUP_CONCAT(menu_role.menu_id)menuIds,role.create_time, role.update_time FROM role LEFT JOIN menu_role ON role.id=menu_role.role_id GROUP BY role.id LIMIT ${pageNum}, ${pageSize} `
+        console.log(sql)
         connection.query(sql, (err, rows) => {
             if (!err) {
-                rows.forEach(item => {
-                    if (item.menuIds) {
-                        item.menuIds = item.menuIds.split(",").map(item2 => Number(item2))
+                const sqlcouter = "SELECT COUNT(*)total FROM role"
+                connection.query(sqlcouter, (err2, rows2) => {
+                    if (!err2) {
+                        rows.forEach(item => {
+                            if (item.menuIds) {
+                                item.menuIds = item.menuIds.split(",").map(item2 => Number(item2))
+                            }
+                        })
+                        resolve({ err, code: 200, data: [...rows], total: rows2[0].total })
+                    } else {
+                        resolve({ err: err2, code: 500, data: null, msg: err2.sqlMessage ? err2.sqlMessage : "服务器错误" })
                     }
                 })
-                resolve({ err, code: 200, data: [...rows] })
             } else {
                 resolve({ err, code: 500, data: null, msg: err.sqlMessage ? err.sqlMessage : "服务器错误" })
             }

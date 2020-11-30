@@ -2,12 +2,25 @@ const mysql = require("mysql");
 const $config = require("../mysql")
 const connection = mysql.createConnection($config);
 connection.connect()
-function getUsers() {
+function getUsers(params) {
     return new Promise((resolve, reject) => {
-        const sql = "SELECT user.id, user.create_time, user.QQ, user.status, user.update_time, user.sex, user.name, user.username, user.avatar, GROUP_CONCAT(role_user.role_id)roleIds FROM user LEFT JOIN role_user ON user.id=role_user.user_id GROUP BY user.id"
+        const pageNum = params.pageNum && params.pageSize ? (Number(params.pageNum) - 1) * Number(params.pageSize) : 0;
+        const pageSize = params.pageSize ? Number(params.pageSize) : 20;
+        const sql = `SELECT user.id, user.create_time, user.QQ, user.status, user.update_time, user.sex, user.name, user.username, user.avatar, GROUP_CONCAT(role_user.role_id)roleIds FROM user LEFT JOIN role_user ON user.id=role_user.user_id GROUP BY user.id LIMIT ${pageNum}, ${pageSize} `
         connection.query(sql, (err, rows) => {
-            const data = rows.map(item => Object.assign(item, { roleIds: item.roleIds.split(",").map(item2 => Number(item2)) }))
-            resolve({ err, code: 200, data: [...data] })
+            if (!err) {
+                const sqlcouter = "SELECT COUNT(*)total FROM user"
+                connection.query(sqlcouter, (err2, rows2) => {
+                    if (!err2) {
+                        const data = rows.map(item => Object.assign(item, { roleIds: item.roleIds.split(",").map(item2 => Number(item2)) }))
+                        resolve({ err, code: 200, data: [...data], total: rows2[0].total })
+                    } else {
+                        resolve({ err: err2, code: 500, data: null, msg: err2.sqlMessage ? err2.sqlMessage : "服务器错误" })
+                    }
+                })
+            } else {
+                resolve({ err, code: 500, data: null, msg: err.sqlMessage ? err.sqlMessage : "服务器错误" })
+            }
         })
     })
 }
@@ -39,7 +52,7 @@ function addUsers(params) {
             }
             resolve({ err, code: 500, data: null, msg: err })
         } else {
-            const rolesql = `INSERT INTO user(name, username, password, sex, status, QQ, avatar) VALUE ("${params.name}", "${params.username}", "${params.password}", "${params.sex}", "${params.status}", "${params.QQ}"), "${params.avatar}")`
+            const rolesql = `INSERT INTO user(name, username, password, sex, status, QQ, avatar) VALUE ("${params.name}", "${params.username}", "${params.password}", "${params.sex}", "${params.status}", "${params.QQ}", "${params.avatar}")`
             connection.query(rolesql, (err, rows) => {
                 if (!err) {
                     if (rows && rows.insertId) {

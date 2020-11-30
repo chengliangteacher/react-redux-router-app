@@ -54,7 +54,7 @@ function getMenus(user_id) {
         }
     })
 }
-function getMenuAll() {
+function getMenuAll(params) {
     return new Promise((resolve, reject) => {
         const sql = `SELECT * FROM menu ORDER BY menu.order`
         connection.query(sql, (err, rows) => {

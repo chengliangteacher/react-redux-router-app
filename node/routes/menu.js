@@ -9,7 +9,7 @@ router.get('/', async function (req, res, next) {
     res.send(result);
 });
 router.get('/all', async function (req, res, next) {
-    const result = await getMenusAllService()
+    const result = await getMenusAllService(req.params)
     res.send(result);
 });
 router.post('/', async function (req, res, next) {

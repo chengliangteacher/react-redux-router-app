@@ -1,6 +1,6 @@
 const { getRolesDao, addRolesDao, editRolesDao, deleteRolesDao } = require("../dao/roles")
-const getRoles = async () => {
-    return await getRolesDao()
+const getRoles = async (params) => {
+    return await getRolesDao(params)
 }
 const addRoles = async (params) => {
     return await addRolesDao(params)

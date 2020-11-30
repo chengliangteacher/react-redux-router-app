@@ -4,7 +4,7 @@ const { getUsersService, getUserService, addUsersService, editUsersService, dele
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
-    const result = await getUsersService()
+    const result = await getUsersService(req.query)
     res.send(result);
 });
 
@@ -19,11 +19,11 @@ router.post('/', async function (req, res, next) {
     res.send(result);
 });
 router.post('/:id', async function (req, res, next) {
-    const result = await editUsersService({...req.body, userId: req.params.id})
+    const result = await editUsersService({ ...req.body, userId: req.params.id })
     res.send(result);
 });
 router.delete('/:id', async function (req, res, next) {
-    const result = await deleteUsersService({userId: req.params.id})
+    const result = await deleteUsersService({ userId: req.params.id })
     res.send(result);
 });
 
