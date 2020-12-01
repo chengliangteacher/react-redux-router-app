@@ -256,7 +256,7 @@ export default class SysMenu extends React.Component<
                                         size="small"
                                     >
                                         编辑
-                  </Button>
+                                    </Button>
                                     <Button
                                         onClick={() => {
                                             this.setState({ deleteVisible: true, delId: record.id });
@@ -265,7 +265,7 @@ export default class SysMenu extends React.Component<
                                         size="small"
                                     >
                                         删除
-                  </Button>
+                                    </Button>
                                 </Space>
                             );
                         }}
@@ -354,7 +354,7 @@ export default class SysMenu extends React.Component<
                                     loading={this.state.btnLoading}
                                 >
                                     保存
-                </Button>
+                                </Button>
                             </Form.Item>
                         </Form>
                     ) : (
@@ -384,7 +384,7 @@ export default class SysMenu extends React.Component<
                             disabled={this.state.delLoading}
                         >
                             关闭
-            </Button>,
+                        </Button>,
                         <Button
                             key="submit"
                             onClick={() => {
@@ -394,7 +394,7 @@ export default class SysMenu extends React.Component<
                             loading={this.state.delLoading}
                         >
                             确定
-            </Button>,
+                        </Button>,
                     ]}
                 >
                     <p className="text-center">删除后数据将无法找回</p>

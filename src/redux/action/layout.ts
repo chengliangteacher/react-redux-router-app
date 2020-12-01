@@ -210,3 +210,10 @@ export const requestMenuData = () => {
       });
   };
 };
+
+//=====================================改变水平布局设置====================================//
+export const changeLayoutX = () => {
+    return {
+      type: 'CHANGE_LAYOUTX',
+    };
+  };

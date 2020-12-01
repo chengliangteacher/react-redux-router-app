@@ -65,4 +65,5 @@ export interface layoutReduxStateTypes {
   planTypesData: BaseDataTypes[];
   menuLoading: boolean;
   menuData: MenuItemTypes[];
+  isLayoutX: boolean
 }
