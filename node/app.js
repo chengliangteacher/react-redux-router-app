@@ -20,6 +20,8 @@ var codeRouter = require('./routes/code');
 var rolesRouter = require('./routes/roles');
 var uploadRouter = require('./routes/upload');
 var viewFileRouter = require("./routes/viewFile")
+var paicRouter = require("./routes/paic")
+var seatRouter = require("./routes/seat")
 
 var app = express();
 
@@ -38,7 +40,7 @@ app.use(expressJwt({
     secret: "token",
     algorithms: ['HS256']
 }).unless({
-    path: ["/api/login", "/api/getcode", /^\/uploads\/.*/]
+    path: ["/api/login", "/api/getcode", /^\/uploads\/.*/, "/api/paic", "/api/seat"]
 })
 )
 app.use(function (err, req, res, next) {
@@ -78,6 +80,8 @@ app.use('/api/getcode', codeRouter);
 app.use('/api/role', rolesRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/uploads', viewFileRouter);
+app.use('/api/paic', paicRouter);
+app.use('/api/seat', seatRouter);
 
 
 // catch 404 and forward to error handler

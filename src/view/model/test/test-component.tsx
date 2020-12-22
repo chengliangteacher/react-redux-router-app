@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Table } from 'antd';
+import { Button, Row, Table } from 'antd';
 import GgridCol from '../../../components/g-grid-col';
 import GTable from '../../../components/g-table';
 const { Column } = Table
@@ -75,6 +75,11 @@ export default class TsetComponent extends React.Component<any, stateTypes> {
     componentWillUnmount() {
         console.log('componentWillUnmount');
     }
+
+    handleOpen = () => {
+        document.cookie='name=chengliang';
+        window.open("http://localhost:8080/portal/testA")
+    }
     render() {
         return (
             <div ref={(ref) => (this.refs = ref)}>
@@ -130,6 +135,7 @@ export default class TsetComponent extends React.Component<any, stateTypes> {
                         align="center"
                     />
                 </GTable>
+                <Button onClick={() => this.handleOpen()}>click</Button>
             </div>
         );
     }

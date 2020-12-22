@@ -1,68 +1,69 @@
 {
-    "name": "react-new-app",
-    "version": "0.1.0",
-    "private": true,
-    "homepage": "./",
-    "dependencies": {
-        "@craco/craco": "^5.8.0",
-        "@testing-library/jest-dom": "^4.2.4",
-        "@testing-library/react": "^9.3.2",
-        "@testing-library/user-event": "^7.1.2",
-        "@types/echarts": "^4.9.0",
-        "@types/jest": "^26.0.15",
-        "@types/md5": "^2.2.1",
-        "@types/node": "^14.14.3",
-        "@types/nprogress": "^0.2.0",
-        "@types/react": "^17.0.0",
-        "@types/react-dom": "^17.0.0",
-        "@types/react-redux": "^7.1.9",
-        "@types/react-router-dom": "^5.1.6",
-        "@types/react-transition-group": "^4.4.0",
-        "@types/redux-logger": "^3.0.8",
-        "@types/redux-thunk": "^2.1.0",
-        "antd": "^4.8.6",
-        "axios": "^0.20.0",
-        "craco-less": "^1.17.1",
-        "echarts": "^4.9.0",
-        "lint-staged": "^10.4.0",
-        "md5": "^2.3.0",
-        "nprogress": "^0.2.0",
-        "prettier": "^2.1.2",
-        "react": "17.0.0",
-        "react-dom": "17.0.0",
-        "react-redux": "^7.2.1",
-        "react-router-dom": "^5.2.0",
-        "react-scripts": "3.4.3",
-        "react-transition-group": "^4.4.1",
-        "redux": "^4.0.5",
-        "redux-logger": "^3.0.6",
-        "redux-thunk": "^2.3.0",
-        "source-map-explorer": "^2.5.0",
-        "typescript": "^4.0.3"
-    },
-    "scripts": {
-        "analyze": "source-map-explorer build/static/js/main.*",
-        "starts": "HTTPS=true craco start",
-        "start": "craco start",
-        "build": "craco build",
-        "test": "craco test",
-        "eject": "craco eject",
-        "serve": "node ./node/bin/www"
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "proxy": "http://localhost:3009"
+  "name": "react-new-app",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "./",
+  "dependencies": {
+    "@craco/craco": "^5.8.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "@types/echarts": "^4.9.0",
+    "@types/jest": "^26.0.15",
+    "@types/md5": "^2.2.1",
+    "@types/node": "^14.14.3",
+    "@types/nprogress": "^0.2.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.6",
+    "@types/react-transition-group": "^4.4.0",
+    "@types/redux-logger": "^3.0.8",
+    "@types/redux-thunk": "^2.1.0",
+    "antd": "^4.8.6",
+    "axios": "^0.20.0",
+    "craco-less": "^1.17.1",
+    "echarts": "^4.9.0",
+    "lint-staged": "^10.4.0",
+    "md5": "^2.3.0",
+    "nprogress": "^0.2.0",
+    "prettier": "^2.1.2",
+    "qs": "^6.9.4",
+    "react": "17.0.0",
+    "react-dom": "17.0.0",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "react-transition-group": "^4.4.1",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "source-map-explorer": "^2.5.0",
+    "typescript": "^4.0.3"
+  },
+  "scripts": {
+    "analyze": "source-map-explorer build/static/js/main.*",
+    "starts": "HTTPS=true craco start",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject",
+    "serve": "node ./node/bin/www"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "proxy": "http://localhost:3009"
 }

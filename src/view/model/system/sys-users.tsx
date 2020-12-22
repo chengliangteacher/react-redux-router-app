@@ -250,7 +250,7 @@ export default class SysUsers extends React.Component<
                                     size="small"
                                 >
                                     编辑
-                </Button>
+                                </Button>
                                 <Button
                                     onClick={() => {
                                         this.setState({ deleteVisible: true, delId: record.id });
@@ -259,7 +259,7 @@ export default class SysUsers extends React.Component<
                                     size="small"
                                 >
                                     删除
-                </Button>
+                                </Button>
                             </Space>
                         )}
                         align="center"
