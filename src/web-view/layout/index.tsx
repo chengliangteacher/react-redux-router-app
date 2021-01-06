@@ -1,6 +1,6 @@
 import React from 'react';
-import Footer from './footer';
-import Header from './header';
+// import Footer from './footer';
+// import Header from './header';
 import Content from './content';
 import { routerConfigItemTypes } from '../../index.d';
 import { RouteChildrenProps } from 'react-router-dom';
@@ -10,9 +10,9 @@ export default class Layout extends React.Component<props> {
   render() {
     return (
       <div>
-        <Header />
+        {/* <Header /> */}
         <Content {...this.props} />
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }
