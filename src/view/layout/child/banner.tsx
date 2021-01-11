@@ -87,7 +87,7 @@ class Banner extends React.Component<props, stateTypes> {
             <Fragment>
                 <Menu
                     id="banner"
-                    style={{ width: collapsed ? 80 : 220, height: (!this.props.isLayoutX ? "calc(100vh - 60px)" : "100vh") }}
+                    style={{ width: collapsed ? 80 : 220, height: (this.props.isLayoutX ? "100vh" : "calc(100vh - 60px)") }}
                     defaultSelectedKeys={this.state.defaultSelectedKeys}
                     defaultOpenKeys={this.state.defaultOpenKeys}
                     mode="inline"

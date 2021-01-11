@@ -40,7 +40,7 @@ app.use(expressJwt({
     secret: "token",
     algorithms: ['HS256']
 }).unless({
-    path: ["/api/login", "/api/getcode", /^\/uploads\/.*/, "/api/paic", "/api/seat"]
+    path: ["/api/login", "/api/getcode", /^\/uploads\/.*/, "/api/paic", "/api/seat", "/socket.io"]
 })
 )
 app.use(function (err, req, res, next) {

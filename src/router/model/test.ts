@@ -31,5 +31,10 @@ const test = [
     path: '/v/test-upload',
     component: lazy(() => import('../../view/model/test/test-upload')),
   },
+  {
+    title: '即时聊天',
+    path: '/v/test-socket',
+    component: lazy(() => import('../../view/model/test/test-socket')),
+  },
 ];
 export default test;

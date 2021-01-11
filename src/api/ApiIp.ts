@@ -5,7 +5,7 @@
     @params       
     @return       
 */
-export const developNodeImgUrl = 'http://localhost:3009/uploads/';
+export const developNodeImgUrl = 'http://10.100.200.107:3009/uploads/';
 export const developUrl = '/api';
 //获取当前的URL中的地址，同时携带端口号,不携带http://
 let projectAddrass = window.location.host;
