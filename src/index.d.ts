@@ -36,7 +36,6 @@ export interface routerConfigItemTypes {
 
 //=====================================菜单数据类型====================================//
 export interface MenuItemTypes {
-  map(arg0: (item: MenuItemTypes) => JSX.Element): import('react').ReactNode;
   id: number;
   text: string;
   hasChildren?: boolean;
