@@ -1,4 +1,5 @@
 import home from './home';
 import order from './order';
-const webViewModel = [...home, ...order];
+import rubiksCube from './rubiks-cube';
+const webViewModel = [...home, ...order, ...rubiksCube];
 export default webViewModel;

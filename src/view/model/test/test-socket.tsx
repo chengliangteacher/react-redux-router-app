@@ -50,7 +50,6 @@ export default class TestSocket extends React.Component<any, stateTypes> {
                         const messagedata = JSON.parse(data);
                         if (!this.state.messageData.some(item => item.id === messagedata.id)) {
                             messagedata.type = 2;
-                            console.log(2222, messagedata)
                             this.setState(state => {
                                 state.messageData.push(messagedata);
                                 return {

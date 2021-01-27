@@ -36,5 +36,10 @@ const test = [
     path: '/v/test-socket',
     component: lazy(() => import('../../view/model/test/test-socket')),
   },
+  {
+    title: '魔方',
+    path: '/v/test-simplerubikscube',
+    component: lazy(() => import('../../view/model/test/simple-rubiks-cube')),
+  },
 ];
 export default test;

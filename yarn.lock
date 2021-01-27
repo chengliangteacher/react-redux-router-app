@@ -11432,6 +11432,11 @@ text-table@0.2.0, text-table@^0.2.0:
   resolved "https://registry.npmjs.org/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
+three-onevent@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npm.taobao.org/three-onevent/download/three-onevent-1.1.2.tgz#968740ae6e8c0d21a0280c39cbed643d815613b8"
+  integrity sha1-lodArm6MDSGgKAw5y+1kPYFWE7g=
+
 three@^0.124.0:
   version "0.124.0"
   resolved "https://registry.npm.taobao.org/three/download/three-0.124.0.tgz?cache=0&sync_timestamp=1608797612774&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fthree%2Fdownload%2Fthree-0.124.0.tgz#14ab1a26ba6c56e51190e1b55695cd3c1e69ea55"
